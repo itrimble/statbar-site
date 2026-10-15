@@ -365,6 +365,16 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p>This is a heuristic, not a registry. A tool that is renamed, wrapped, or installed somewhere unusual can be missed, and an unrelated process that happens to be started by a tool is counted as that tool's. The ancestry part also depends on StatBar having watched the process start (see <a href="#the-parent-column">The Parent column</a>). A tool not on the list is not recognized.</p>
 <h3 id="ai-tools-in-top-offenders">AI Tools in Top Offenders</h3>
 <p>Choose <strong>AI Tools</strong> in the Top Offenders switch. It lists the three tools using the most memory right now, each with a line such as <code>4.2 GB · 38% · 12 processes</code>: memory, CPU (as a percentage of one core, so it can exceed 100%) and process count, totalled over everything charged to that tool. Memory is physical footprint. Nothing is listed when none of the listed tools is running.</p>
+<h3 id="stuck-agents">Stuck agents</h3>
+<p>If a process that belongs to Claude Code, Codex, Gemini CLI or Aider (its own, or one it started) looks like it got away from its agent, a warning line appears under Top Offenders while the menu is open: <code>⚠︎ Codex: python3.13 may be stuck — 99% CPU, averaging 95% for 50 min</code>. Hover for up to six; click to open Monitors on the AI &amp; Dev Tools filter.</p>
+<p>Two things are flagged, and only among your own processes:</p>
+<ul>
+<li><strong>Spinning.</strong> Using at least 80% of a core right now, having averaged at least 60% of a core over a lifetime of 15 minutes or more.</li>
+<li><strong>Left behind.</strong> Its agent has exited, so launchd now owns it, and it is still using real CPU (5% or more) or 200 MB or more of memory. This relies on StatBar having watched it start.</li>
+</ul>
+<p>It cannot tell a stuck process from a long build or test run, which is why it says <em>may be</em>. Editors, Ollama, Docker and Xcode builds are busy by design and are not judged. Nothing is stopped for you; use Stop Process in Monitors, which asks first. The same list appears in the status snapshot.</p>
+<h3 id="which-ollama-model-is-loaded">Which Ollama model is loaded</h3>
+<p>When Ollama is running, a line under Top Offenders reads like <code>Ollama: qwen3:14b · 9.3 GB · 100% GPU · unloads in 4 min</code>. "Stays loaded" means it is pinned. A model that is less than 100% on the GPU is running partly on the CPU, which is much slower. StatBar gets this by asking Ollama's own API at <code>127.0.0.1:11434</code>, the loopback address of this Mac, only while Ollama is running and the menu is open (or when you take a snapshot). It contacts nothing else and does not try a custom Ollama address.</p>
 <p>In the Monitors window, the CPU and Memory tabs have an <strong>AI &amp; Dev Tools</strong> option in the process filter. It shows only processes that belong to a recognized tool, using the same rules. Combine it with <strong>Hierarchy</strong> to see what each tool has running underneath it.</p>
 <h3 id="the-ai-column-in-the-menu-bar">The AI column in the menu bar</h3>
 <p>You can add an <strong>AI</strong> column to the bar itself. It shows the total memory held by recognized AI and developer tools, colored by that memory's share of your RAM, and uses the same recognition rules as the AI Tools view. It is <strong>off by default</strong>.</p>
@@ -397,7 +407,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <ul>
 <li>It prints Markdown by default, or JSON with <code>--json</code>, and exits. It takes about three seconds, because rates need two samples. It does not need a running StatBar and does not touch the menu bar.</li>
 <li><code>--with-cleanup</code> adds the sizes of the caches Free Up Space knows about, largest first. <strong>It only measures. Nothing is deleted.</strong> Deleting is done only from the Free Up Space window, with your confirmation.</li>
-<li>It reads only what the app already reads, includes no serial number, and makes no network request.</li>
+<li>It reads only what the app already reads, includes no serial number, and makes no request beyond this Mac (if Ollama is running it is asked, over 127.0.0.1, which model is loaded).</li>
 </ul>
 <p>A sentence in your agent's instructions, such as "run <code>StatBar --snapshot</code> before starting a large build or loading a local model", is enough to put it to use.</p>
 <h2 id="free-up-space">Free Up Space</h2>
@@ -644,7 +654,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p><strong>How do I get updates?</strong> Gumroad emails you when a new version is published. <strong>Check for Updates...</strong> opens the product page in your browser. The app never checks on its own.</p>
 <p><strong>Can I use it on more than one Mac?</strong> Yes. The license covers every Mac you personally own. Install it on each. It does not cover redistributing or reselling it.</p>
 <p><strong>Is it on the Mac App Store?</strong> No. See "Not sandboxed, on purpose".</p>
-<p><strong>Does it use the internet?</strong> Only if you turn on Weather. Out of the box it makes no network requests at all.</p>
+<p><strong>Does it use the internet?</strong> Only if you turn on Weather. Out of the box it makes no request off your Mac. The one local exception: when Ollama is running, StatBar asks it over 127.0.0.1 which model is loaded.</p>
 <p><strong>How much does it cost my Mac to run it?</strong> StatBar uses one timer, one small sampler per stat, and no polling subprocesses. In a measurement on the developer's Mac on 12 September 2026, an earlier build used about 16 MiB of memory and about 0.03% of one core with the Monitors window closed, and about 50 MiB with it open. Results vary by Mac and load.</p>
 <p><strong>Why is my CPU percentage over 100%?</strong> In the CPU monitor and Top Offenders, 100% is one core, so an app using several cores can exceed it. The bar's CPU figure is the total across all cores, out of 100%.</p>
 <p><strong>Why do some processes show a lower memory number than Activity Monitor?</strong> StatBar shows physical footprint, including compressed memory. Activity Monitor can show a different column.</p>
