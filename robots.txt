@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://statbar.remnantsecurity.com/sitemap.xml

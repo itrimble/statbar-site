@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>StatBar User Guide | StatBar</title>
+<meta name="description" content="How to install and use StatBar: the menu bar readout, color scale and thresholds, Top Offenders, Monitors, Free Up Space, Settings, permissions, troubleshooting and FAQ." />
+<link rel="canonical" href="https://statbar.remnantsecurity.com/guide/" />
+<meta name="color-scheme" content="dark light" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Remnant Security" />
+<meta property="og:url" content="https://statbar.remnantsecurity.com/guide/" />
+<meta property="og:title" content="StatBar User Guide" />
+<meta property="og:description" content="How to install and use StatBar: the menu bar readout, color scale and thresholds, Top Offenders, Monitors, Free Up Space, Settings, permissions, troubleshooting and FAQ." />
+<meta property="og:image" content="https://statbar.remnantsecurity.com/og-image.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="StatBar User Guide" />
+<meta name="twitter:description" content="How to install and use StatBar: the menu bar readout, color scale and thresholds, Top Offenders, Monitors, Free Up Space, Settings, permissions, troubleshooting and FAQ." />
+<meta name="twitter:image" content="https://statbar.remnantsecurity.com/og-image.png" />
+<style>
+:root{--bg:#09090b;--panel:#111114;--fg:#d4d4d8;--strong:#fafafa;--muted:#a1a1aa;--line:#27272a;--accent:#6ee7b7;--code:#18181b}
+@media (prefers-color-scheme:light){:root{--bg:#fafafa;--panel:#fff;--fg:#27272a;--strong:#09090b;--muted:#52525b;--line:#d4d4d8;--accent:#047857;--code:#f4f4f5}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible,.tw:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--strong);color:var(--bg);padding:8px 12px;border-radius:4px;z-index:9}
+.skip:focus{left:8px}
+header.top{border-bottom:1px solid var(--line);position:sticky;top:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);z-index:5}
+header.top div{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;gap:16px;align-items:center;justify-content:space-between;font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace}
+header.top a{color:var(--fg);text-decoration:none}
+header.top a:hover{color:var(--strong)}
+header.top .brand{display:flex;align-items:center;gap:8px;color:var(--strong)}
+header.top nav{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:flex-end}
+.wrap>*{min-width:0}
+.wrap{max-width:1100px;margin:0 auto;padding:32px 16px 80px;display:grid;grid-template-columns:240px minmax(0,1fr);gap:48px}
+@media (max-width:860px){.wrap{grid-template-columns:1fr;gap:16px}}
+aside nav{position:sticky;top:64px;font-size:14px}
+@media (max-width:860px){aside nav{position:static}}
+aside h2{font:600 12px ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 8px}
+aside ol{list-style:none;margin:0;padding:0}
+aside li a{display:block;padding:4px 0;color:var(--fg);text-decoration:none}
+aside li a:hover{color:var(--accent)}
+@media (max-width:860px){aside details>summary{cursor:pointer;font-weight:600}aside ol{margin-top:8px}}
+@media (min-width:861px){aside details>summary{display:none}}
+@media (max-width:860px){aside details h2{display:none}}
+main h1{font:700 34px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--strong);margin:0 0 8px}
+main .lead{color:var(--muted);margin:0 0 24px}
+main h2{font:700 24px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--strong);margin:48px 0 12px;padding-top:8px;border-top:1px solid var(--line);scroll-margin-top:64px}
+main h3{font:700 18px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--strong);margin:32px 0 8px;scroll-margin-top:64px}
+pre,code{overflow-wrap:anywhere}
+pre{overflow-x:auto}
+code{font:.9em ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px}
+.tw{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{padding:8px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--panel);color:var(--strong);font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+li{margin:4px 0}
+strong{color:var(--strong)}
+footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;color:var(--muted);font:12px ui-monospace,Menlo,monospace}
+</style>
+</head>
+<body>
+<a class="skip" href="#guide">Skip to the guide</a>
+<header class="top"><div>
+  <a class="brand" href="../"><img src="../icon-64.png" width="22" height="22" alt="" style="border-radius:5px" /> StatBar</a>
+  <nav aria-label="Primary"><a href="../">Home</a><a href="../#buy">Buy</a><a href="https://remnantsecurity.com/">Remnant Security</a></nav>
+</div></header>
+<div class="wrap">
+<aside><nav aria-label="Guide contents"><details open><summary>Contents</summary><h2>Contents</h2><ol>
+<li><a href="#install">Install</a></li>
+<li><a href="#reading-the-menu-bar">Reading the menu bar</a></li>
+<li><a href="#what-the-colors-mean">What the colors mean</a></li>
+<li><a href="#the-menu">The menu</a></li>
+<li><a href="#monitors">Monitors</a></li>
+<li><a href="#free-up-space">Free Up Space</a></li>
+<li><a href="#settings">Settings</a></li>
+<li><a href="#permissions-and-privacy">Permissions and privacy</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#faq">FAQ</a></li>
+<li><a href="#keyboard-shortcuts">Keyboard shortcuts</a></li>
+<li><a href="#getting-help">Getting help</a></li>
+</ol></details></nav></aside>
+<main id="guide">
+<h1>StatBar User Guide</h1>
+<p class="lead">Version 1.0.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
+<p>StatBar puts your Mac's vitals in the menu bar: CPU, GPU, memory, disk, network, battery, temperature and fans, plus optional weather. Click it for the details, open the Monitors window to see what is using your Mac, and use Free Up Space to clear the caches that developer tools and AI coding agents leave behind.</p>
+<p>This guide matches StatBar 1.0.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
+<h2 id="install">Install</h2>
+<ol type="1">
+<li>Open the download and drag <strong>StatBar.app</strong> into your <strong>Applications</strong> folder.</li>
+<li>Open it from Applications. StatBar has no Dock icon and no window: it appears as a small readout in the menu bar.</li>
+<li>Click the readout to open the menu.</li>
+</ol>
+<p>On first launch StatBar asks for nothing. No permission prompt appears, no window opens, and nothing is sent anywhere. Every optional feature (Launch at Login, the helper, Weather) asks only when you switch it on.</p>
+<p>The release build is distributed outside the Mac App Store. The final release is intended to be signed with a Developer ID and notarized by Apple, so Gatekeeper opens it without a warning. If macOS does show a prompt on first open, confirm it only if the app came from your own purchase.</p>
+<h3 id="launch-at-login">Launch at Login</h3>
+<p>Choose <strong>Launch at Login</strong> in the menu. A check mark means it is on. macOS may show a "Background Items Added" notice the first time; that is macOS announcing the login item you just asked for. If it fails, StatBar shows the error macOS returned. Choose the item again to turn it off.</p>
+<p>Keep StatBar in <strong>Applications</strong> while you use Launch at Login. Running it from a Downloads folder or a disk image can make macOS treat it as a different copy.</p>
+<h2 id="reading-the-menu-bar">Reading the menu bar</h2>
+<p>Each stat is a column: a label on top, the value underneath. The bar sits on a small dark rounded plate so it stays readable on any wallpaper, light or dark.</p>
+<div class="tw" tabindex="0" role="region" aria-label="Table, scrolls sideways on narrow screens"><table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU</td>
+<td>Total CPU use, as a percentage</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>GPU device utilization, as a percentage</td>
+</tr>
+<tr>
+<td>MEM</td>
+<td>Memory in use, as a percentage. Its color follows macOS memory pressure, not the percentage</td>
+</tr>
+<tr>
+<td>DSK</td>
+<td>How full your data volume is, as a percentage</td>
+</tr>
+<tr>
+<td>Down and up arrows</td>
+<td>Network download above upload, in bytes per second. No label</td>
+</tr>
+<tr>
+<td>BAT</td>
+<td>Battery level, with a lightning bolt while charging. Hidden on Macs without a battery</td>
+</tr>
+<tr>
+<td>TMP</td>
+<td>Average CPU temperature in whole degrees Celsius</td>
+</tr>
+<tr>
+<td>FAN</td>
+<td>Average fan speed in thousands of RPM, for example <code>3.5k</code>, or <code>OFF</code> when every fan has stopped. Hidden on Macs without fans</td>
+</tr>
+<tr>
+<td>WX</td>
+<td>Current temperature for your city, if you turned Weather on and chose <strong>Show in Menu Bar</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Turn stats on and off with the checkable rows in the menu (CPU, GPU, Memory, Disk, Network, Battery, Temperature, Fans). A stat that is off is hidden and <strong>not measured at all</strong>, so it costs nothing.</p>
+<p>If a stat is not available on your Mac, for example a battery on a desktop, it is left out of the bar. In the menu its row reads "unavailable" or "none".</p>
+<p>Readings refresh every 2 seconds by default. Choose 1, 2, 5 or 10 seconds in <strong>Settings › Update Interval</strong>. StatBar stops sampling while the system or the display sleeps and starts again when both are awake.</p>
+<h2 id="what-the-colors-mean">What the colors mean</h2>
+<p>Every reading is one of five steps: <strong>low</strong> (green), <strong>moderate</strong> (yellow), <strong>elevated</strong> (orange), <strong>high</strong> (red) and <strong>critical</strong>. Critical turns white text on a filled red chip, so the worst state never depends on telling two hues apart. Every color is also printed as a number beside it.</p>
+<p>Each stat has its own scale, because 86% means different things for different parts of your Mac. A step begins at the value shown and ends where the next begins.</p>
+<div class="tw" tabindex="0" role="region" aria-label="Table, scrolls sideways on narrow screens"><table>
+<thead>
+<tr>
+<th>Stat</th>
+<th>Low</th>
+<th>Moderate</th>
+<th>Elevated</th>
+<th>High</th>
+<th>Critical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU (percent)</td>
+<td>under 30</td>
+<td>30 to 55</td>
+<td>55 to 75</td>
+<td>75 to 90</td>
+<td>90 and up</td>
+</tr>
+<tr>
+<td>GPU (percent)</td>
+<td>under 40</td>
+<td>40 to 65</td>
+<td>65 to 85</td>
+<td>85 to 95</td>
+<td>95 and up</td>
+</tr>
+<tr>
+<td>Disk (percent full)</td>
+<td>under 70</td>
+<td>70 to 80</td>
+<td>80 to 90</td>
+<td>90 to 95</td>
+<td>95 and up</td>
+</tr>
+<tr>
+<td>Temperature (degrees C)</td>
+<td>under 60</td>
+<td>60 to 75</td>
+<td>75 to 85</td>
+<td>85 to 95</td>
+<td>95 and up</td>
+</tr>
+<tr>
+<td>Load average, per core</td>
+<td>under 0.5</td>
+<td>0.5 to 0.8</td>
+<td>0.8 to 1.0</td>
+<td>1.0 to 1.5</td>
+<td>1.5 and up</td>
+</tr>
+<tr>
+<td>Fans (percent of the fan's own range)</td>
+<td>under 25</td>
+<td>25 to 50</td>
+<td>50 to 75</td>
+<td>75 to 90</td>
+<td>90 and up</td>
+</tr>
+<tr>
+<td>Battery (percent left)</td>
+<td>50 and up</td>
+<td>30 to 50</td>
+<td>20 to 30</td>
+<td>10 to 20</td>
+<td>under 10</td>
+</tr>
+</tbody>
+</table></div>
+<p>Some stats follow their own rules:</p>
+<ul>
+<li><strong>Memory</strong> follows the pressure level macOS reports, not the percentage. Normal pressure is green, a warning is orange, and critical pressure is the critical chip. Memory never shows yellow or red.</li>
+<li><strong>Battery</strong> is judged by what is left, so its scale runs downward. While charging it is always green.</li>
+<li><strong>Load average</strong> only means something per core: 1.0 per core is a full machine. The menu shows the raw load average and a tooltip gives the per-core figure.</li>
+<li><strong>Fans</strong> that have stopped (<code>OFF</code>) show as low. Apple silicon fans stop entirely at idle.</li>
+<li><strong>Network speed</strong> has no "bad", so it does not use the five steps. Download climbs through greens to a bright glow at very high speeds; upload runs from orange to red.</li>
+</ul>
+<h3 id="color-themes">Color themes</h3>
+<p>Choose <strong>Settings › Color Theme</strong>:</p>
+<ul>
+<li><strong>Bands (green to red)</strong> is the default.</li>
+<li><strong>Colorblind-friendly</strong> uses the Okabe-Ito palette: sky blue, blue, orange and vermillion. It never pairs red with green, and download is in the blue family while upload is orange.</li>
+<li><strong>Monochrome</strong> removes hue entirely. Readings are plain text, and critical inverts to dark text on a light chip. The numbers and arrows carry the meaning.</li>
+</ul>
+<p>The theme changes immediately, without restarting.</p>
+<h2 id="the-menu">The menu</h2>
+<p>Click the bar to open the menu, from top to bottom:</p>
+<ol type="1">
+<li><strong>This Mac</strong>: your Mac's marketing name, its artwork in this unit's color, chip, memory, startup disk, serial number and macOS version, like About This Mac.</li>
+<li><strong>Live readings</strong>: CPU (with user and system split), Load (1, 5 and 15 minute averages), GPU, Memory (used and total), Disk (used and total), Net (current rates, and session totals underneath), Battery (state and time remaining, with health and power lines), Temp (CPU average, hottest CPU sensor, GPU), Fans (RPM per fan, and auto or manual) and Weather when it is on. Click CPU, Mem, Disk, Net, GPU or Bat to open that monitor.</li>
+<li><strong>Top Offenders</strong>.</li>
+<li><strong>Open Monitors...</strong> and <strong>Free Up Space...</strong></li>
+<li>The stat toggles, then <strong>Fan Control</strong>, <strong>Settings</strong>, <strong>Launch at Login</strong>, <strong>Help</strong>, <strong>About StatBar</strong>, <strong>Check for Updates...</strong> and <strong>Quit StatBar</strong>.</li>
+</ol>
+<p>Rows update only while the menu is open.</p>
+<h3 id="top-offenders">Top Offenders</h3>
+<p>A switch at the top of the section chooses <strong>CPU</strong>, <strong>Disk I/O</strong> or <strong>Energy</strong>, and the three heaviest apps right now are listed with their icons. StatBar remembers your choice.</p>
+<ul>
+<li>Helper processes are rolled up into their app, so a browser and its twenty helpers are one line.</li>
+<li>CPU is shown as a percentage of one core, so it can exceed 100% for an app using several cores. Energy is shown in watts. Disk I/O is bytes per second.</li>
+<li>Apps below a small floor (under 1% CPU, 10 KB/s of disk, or 0.05 W) are not listed, so a quiet Mac can show fewer than three.</li>
+<li>Sampling happens only while the menu is open. Rates need two samples, so the list appears about a second after you open the menu.</li>
+<li>Processes owned by the system are hidden from ordinary apps. Turn on <strong>Settings › Include System Processes</strong> if you want WindowServer, kernel_task and other root daemons to be counted.</li>
+</ul>
+<p><strong>Why there is no per-app network.</strong> macOS exposes per-app network traffic only through a command-line subprocess (<code>nettop</code>) or a private framework. StatBar uses neither: it runs no subprocesses to take readings and uses no private interfaces. The Network monitor shows per-interface totals instead. The GPU monitor likewise shows the whole device, not per-app GPU use.</p>
+<h2 id="monitors">Monitors</h2>
+<p>Choose <strong>Open Monitors...</strong> (Command-M while the menu is open), or click a reading in the menu. The window has one tab each for <strong>CPU</strong>, <strong>Memory</strong>, <strong>Disk</strong>, <strong>Network</strong>, <strong>GPU</strong> and <strong>Battery</strong>. Detail sampling runs only while the window is visible and not paused. Closing, hiding or minimizing it, or sleeping the Mac, stops it.</p>
+<h3 id="the-tabs">The tabs</h3>
+<ul>
+<li><strong>CPU</strong>: a bar for every core, with efficiency and performance cores averaged separately on Apple silicon, above a process list. Columns: Process, PID, CPU %, Parent, User. 100% means one full core.</li>
+<li><strong>Memory</strong>: a memory graph with pressure, above the same process list sorted by memory. Memory is physical footprint, including compressed memory. Columns: Process, PID, Memory, Parent, User.</li>
+<li><strong>Disk</strong>: mounted volumes with Used, Available, Capacity and Used %. APFS volumes can share one container's free space, so do not add the capacities together.</li>
+<li><strong>Network</strong>: interfaces with Download/s, Upload/s, Received, Sent and Link. Wi-Fi shows signal strength, link rate and channel; the network name is deliberately not shown (see Permissions). VPN, loopback and physical interfaces can count overlapping traffic, so do not add them.</li>
+<li><strong>GPU</strong>: device utilization, renderer and tiler load, memory in use and core count.</li>
+<li><strong>Battery</strong>: charge, status, time estimate, health, cycle count, power flow, and adapter wattage. Desktop Macs show "No battery reading available".</li>
+</ul>
+<p>The first CPU or network reading after opening or resuming is a baseline and shows an em dash. Real values follow on the next sample.</p>
+<h3 id="sorting-search-filter">Sorting, search, filter</h3>
+<ul>
+<li>Click a column heading to sort by it, and click it again to reverse. Each tab remembers its sort.</li>
+<li><strong>Search</strong> matches a name, an exact PID, or part of an executable's path. On Disk it matches a volume name or path.</li>
+<li><strong>All Processes / Apps Only</strong> (CPU and Memory) limits the list to real applications. It is remembered.</li>
+<li><strong>Hierarchy</strong> nests each process under the one that started it, so you can see everything one tool is responsible for. Searching keeps a match's parents visible. Turn it off for a flat list sorted across every process. It is off by default and remembered.</li>
+<li><strong>Pause</strong> freezes the list. <strong>Resume</strong> takes fresh baselines. The footer shows Live, Paused or Sleeping, how many items are shown, and the time of the last sample.</li>
+</ul>
+<h3 id="the-parent-column">The Parent column</h3>
+<p>Parent is an ancestry chain, not one hop, so you can tell which tool started a process without chasing PIDs row to row:</p>
+<p><code>python3.13 (17986) ← uv ← codex ← ChatGPT</code></p>
+<p>Read it right to left: ChatGPT started codex, which started uv, which started python3.13. Only the immediate parent shows a PID.</p>
+<ul>
+<li>The chain stops at four links or at launchd, which is never shown because every chain ends there. Runs of the same name are folded into one.</li>
+<li>If a process outlived its parent, StatBar names the parent it saw: <code>launchd (1) ← unsloth-studio (63029)</code>. A parent that has since exited is marked <code>(exited)</code>.</li>
+<li>StatBar can only attribute processes it watched start. Anything already running before the first Monitors window was opened in this launch, or before the last reboot, shows whatever parent it has now. Nothing is guessed.</li>
+<li>Hover over a Process name to see its full executable path.</li>
+</ul>
+<h3 id="quit-force-quit-stop">Quit, Force Quit, Stop</h3>
+<p>Select a row, then use the buttons under the table.</p>
+<div class="tw" tabindex="0" role="region" aria-label="Table, scrolls sideways on narrow screens"><table>
+<thead>
+<tr>
+<th>Selected</th>
+<th>Buttons</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>An application</td>
+<td><strong>Quit App</strong></td>
+<td>Asks the app to quit normally. It may show its own save prompt or decline.</td>
+</tr>
+<tr>
+<td>An application</td>
+<td><strong>Force Quit...</strong></td>
+<td>Asks you to confirm by name, then ends it immediately. Unsaved changes are lost.</td>
+</tr>
+<tr>
+<td>A background process</td>
+<td><strong>Stop Process...</strong></td>
+<td>Confirms, then sends a polite stop request (SIGTERM). Its current work may be interrupted.</td>
+</tr>
+<tr>
+<td>A background process</td>
+<td><strong>Force Stop...</strong></td>
+<td>Confirms, then ends it immediately (SIGKILL).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Safety rules:</p>
+<ul>
+<li>The buttons are enabled only for processes <strong>you own</strong>. Other users' and system processes are read only, and the detail line says so.</li>
+<li>StatBar will not act on <strong>itself</strong> or on <strong>launchd (PID 1)</strong>.</li>
+<li>The confirmation dialogs have Cancel as the default button.</li>
+<li>The signal is sent by the process's kernel audit token, checked after you confirm. If the process exited and its PID was reused by something else, the action is refused rather than hitting the wrong process.</li>
+<li>macOS may still refuse to stop a protected process. StatBar shows the error.</li>
+<li>Nothing is ever stopped automatically.</li>
+</ul>
+<h2 id="free-up-space">Free Up Space</h2>
+<p>AI coding tools and developer workflows quietly fill a disk with caches that regenerate themselves: package downloads, build products, model files, simulators and container leftovers. <strong>Free Up Space...</strong> finds them, shows how big each one is, and clears the ones you tick.</p>
+<p>Open it from the menu. It scans when it opens, and <strong>Scan</strong> runs it again. Nothing is deleted without two clicks: tick items, choose <strong>Clean N Selected...</strong>, then confirm in a dialog that lists every item and size. The window also shows how much space is free on this Mac.</p>
+<p>Sizes are allocated disk space. A very large folder is measured for a limited time, so its figure can be a lower bound.</p>
+<h3 id="safe-to-clear">Safe to clear</h3>
+<p>These sit under <strong>Safe to clear, rebuilt automatically</strong>. Tools download or rebuild what they need on next use. Items marked "pre-ticked" are selected for you after a scan; you can untick them. Items that are not present on your Mac are not listed.</p>
+<div class="tw" tabindex="0" role="region" aria-label="Table, scrolls sideways on narrow screens"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What is removed (inside your home folder)</th>
+<th>After clearing</th>
+<th>Pre-ticked</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uv cache</td>
+<td><code>~/.cache/uv</code></td>
+<td>uv re-fetches what it needs</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>pip cache</td>
+<td><code>~/Library/Caches/pip</code></td>
+<td>Packages download again</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>npm cache</td>
+<td><code>~/.npm/_cacache</code></td>
+<td>npm downloads tarballs again</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Yarn cache</td>
+<td><code>~/Library/Caches/Yarn</code></td>
+<td>Packages download again</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Homebrew downloads</td>
+<td><code>~/Library/Caches/Homebrew</code></td>
+<td>Bottles and sources already installed</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Cargo registry cache</td>
+<td><code>~/.cargo/registry/cache</code></td>
+<td>Cargo fetches crates again</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Go build cache</td>
+<td><code>~/Library/Caches/go-build</code></td>
+<td>The next build is slower, once</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>pre-commit environments</td>
+<td><code>~/.cache/pre-commit</code></td>
+<td>Rebuilt on the next commit</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Xcode DerivedData</td>
+<td><code>~/Library/Developer/Xcode/DerivedData</code></td>
+<td>Xcode rebuilds it. Quit Xcode first</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Simulator caches</td>
+<td><code>~/Library/Developer/CoreSimulator/Caches</code></td>
+<td>Caches kept by CoreSimulator. Quit Xcode first</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Gradle caches</td>
+<td><code>~/.gradle/caches</code></td>
+<td>The next build re-downloads dependencies</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Playwright browsers</td>
+<td><code>~/Library/Caches/ms-playwright</code></td>
+<td><code>npx playwright install</code> brings them back</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Hugging Face model cache</td>
+<td><code>~/.cache/huggingface</code></td>
+<td>Models and datasets re-download on use, which can be slow</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Xcode device support</td>
+<td><code>~/Library/Developer/Xcode/iOS DeviceSupport</code></td>
+<td>Symbols copy again on the next connect. Quit Xcode first</td>
+<td>No</td>
+</tr>
+</tbody>
+</table></div>
+<p>Three more items run a tool instead of deleting folders. None is pre-ticked, and none runs a shell:</p>
+<div class="tw" tabindex="0" role="region" aria-label="Table, scrolls sideways on narrow screens"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What it runs</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shut down running simulators</td>
+<td><code>simctl shutdown all</code></td>
+<td>Frees the memory booted simulators hold. Their data is kept. Shown only when simulators are running.</td>
+</tr>
+<tr>
+<td>Delete unavailable simulators</td>
+<td><code>simctl delete unavailable</code></td>
+<td>Removes simulators whose runtime is gone, usually after an Xcode update. Shown only when there are some.</td>
+</tr>
+<tr>
+<td>Docker leftovers</td>
+<td><code>docker system prune -f</code></td>
+<td>Removes stopped containers, dangling images, unused networks and build cache. Running containers and volumes are kept. Shown only if Docker's command-line tool is installed (in <code>/usr/local/bin</code>, <code>/opt/homebrew/bin</code>, or the Docker app). Docker must be running for it to succeed.</td>
+</tr>
+</tbody>
+</table></div>
+<p>If Xcode is running, items that depend on it show <strong>Quit Xcode first</strong> and cannot be ticked.</p>
+<h3 id="review-yourself">Review yourself</h3>
+<p>These sit under <strong>Review yourself: large, personal, or slow to get back</strong>. StatBar shows their size and a <strong>Show</strong> button that opens the folder in Finder. <strong>StatBar never deletes anything here.</strong></p>
+<ul>
+<li>All simulators (<code>~/Library/Developer/CoreSimulator/Devices</code>)</li>
+<li>Ollama models (<code>~/.ollama/models</code>)</li>
+<li>LM Studio models (<code>~/.lmstudio/models</code>)</li>
+<li>Tart virtual machines (<code>~/.tart/vms</code>; remove with <code>tart delete</code>)</li>
+<li>Lima virtual machines (<code>~/.lima</code>; remove with <code>limactl delete</code>)</li>
+<li>Colima VM (<code>~/.colima</code>; remove with <code>colima delete</code>)</li>
+<li>Xcode archives (<code>~/Library/Developer/Xcode/Archives</code>)</li>
+<li>Codex data (<code>~/.codex</code>) and Claude Code data (<code>~/.claude</code>): sessions and logs</li>
+<li>Trash: opens the Trash in Finder so you can empty it yourself. macOS keeps the Trash private from apps, so no size is shown.</li>
+</ul>
+<h3 id="what-is-deleted-and-what-never-is">What is deleted, and what never is</h3>
+<ul>
+<li>Every location is a fixed path under your home folder, written into the app. No path is ever taken from a process, a file or the network.</li>
+<li>Only the <strong>contents</strong> of a folder are removed, one item at a time. The folder itself stays.</li>
+<li>A folder is acted on only if it is a real folder, not a link, and does not resolve through a link to somewhere else.</li>
+<li>Symlinks are removed as links and never followed. Items on a different disk volume are skipped.</li>
+<li><strong>The ten-minute rule.</strong> Any item whose modified time is within the last ten minutes is skipped as "in use" and counted as "left alone". Run it again later to clear those.</li>
+<li>Deletion is permanent. It does not use the Trash.</li>
+<li>Never touched: Documents, Desktop, Downloads, Pictures, Movies, Music, Public and Applications, your <code>.ssh</code>, <code>.gnupg</code>, <code>.aws</code>, <code>.config</code>, <code>.kube</code> and <code>.docker</code> folders, and the Mail, Messages, Safari, Keychains, Containers, Group Containers, Application Support and Preferences folders in your Library.</li>
+<li>It reads nothing from macOS-protected locations, so it asks for no permission. It makes no network requests.</li>
+<li>Tools (<code>simctl</code>, <code>docker</code>) run from fixed locations with fixed arguments, a minimal environment and a time limit.</li>
+</ul>
+<p>When it finishes, the status line reads, for example, "Freed 4.2 GB, 3 left alone". Hover over it to see which items were skipped or failed and why. The list then rescans.</p>
+<h3 id="several-macs">Several Macs</h3>
+<p>Free Up Space cleans <strong>only the Mac it runs on</strong>. To clean another Mac, run StatBar there. Your license covers every Mac you personally own, so install it on each.</p>
+<h2 id="settings">Settings</h2>
+<p>Open them from <strong>Settings</strong> in the menu.</p>
+<ul>
+<li><strong>Update Interval</strong>: 1, 2, 5 or 10 seconds. The default is 2.</li>
+<li><strong>Appearance</strong>: <strong>Forge Dark</strong> (the default) gives the monitor windows a compact dark look. <strong>Follow macOS</strong> uses the system appearance.</li>
+<li><strong>Color Theme</strong>: Bands, Colorblind-friendly or Monochrome. See above.</li>
+<li><strong>Weather</strong>: see below.</li>
+<li><strong>Include System Processes</strong>: see below.</li>
+<li><strong>Reset Session Totals</strong>: zeroes the network totals shown under the Net row.</li>
+</ul>
+<h3 id="weather">Weather</h3>
+<p>Weather is optional and <strong>off by default</strong>. It is the only part of StatBar that uses the internet.</p>
+<ol type="1">
+<li>Choose <strong>Settings › Weather › Show Weather</strong>. A panel asks for a city.</li>
+<li>Start typing. Suggestions appear as you type. Choose one, then <strong>Use This Location</strong>.</li>
+</ol>
+<p>The menu then shows conditions for that place, and <strong>Show in Menu Bar</strong> adds a WX column. You can switch between <strong>Celsius</strong> and <strong>Fahrenheit</strong>, use <strong>Refresh Now</strong>, or turn it off again, after which StatBar stops making requests.</p>
+<p>How it works: the city suggestions are provided by Apple's MapKit, so what you type in that box goes to Apple. StatBar stores only the chosen coordinates and name. It then asks a free, keyless weather service for conditions every 30 minutes: the US National Weather Service inside the United States, and MET Norway everywhere else. Those requests carry your chosen coordinates and an identifying User-Agent, and no account or ID.</p>
+<h3 id="include-system-processes">Include System Processes</h3>
+<p>An ordinary app cannot read other users' processes. About a quarter of them, such as WindowServer and kernel_task, fail every unprivileged check. Switch on <strong>Include System Processes</strong> and Top Offenders and the monitors can see them.</p>
+<p>It uses the same small helper as fan control, so macOS asks you to approve it once in <strong>System Settings › General › Login Items</strong> (under Allow in the Background). The menu line under the setting shows the state:</p>
+<ul>
+<li>"Helper active" means it is working.</li>
+<li>"Approve StatBar in System Settings › Login Items" means it is waiting for you.</li>
+<li>"Helper not installed" means toggle it off and on again.</li>
+</ul>
+<p>The helper is strictly read-only here. It reports counters and never sends signals to, or attaches to, a process. System and other users' processes still cannot be stopped from the Monitors window. The helper accepts connections only from this exact build of StatBar and exits when idle.</p>
+<h3 id="fan-control">Fan Control</h3>
+<p>Fan control works on <strong>Apple silicon</strong> only. On an Intel Mac the menu says so. Reading temperatures and fan speeds never needs the helper; only <strong>changing</strong> fan speed does.</p>
+<p>Choose a mode from <strong>Fan Control</strong>:</p>
+<ul>
+<li><strong>Automatic (macOS)</strong>: macOS decides. This is the default.</li>
+<li><strong>Constant 25%</strong>, <strong>Constant 50%</strong>, <strong>Constant 75%</strong> or <strong>Full Speed</strong>.</li>
+<li><strong>Follow CPU Temperature</strong>: ramps from each fan's minimum at 55 degrees C to its maximum at 85 degrees C, using the hottest CPU sensor.</li>
+</ul>
+<p>Speeds are always kept between each fan's own minimum and maximum, both in the app and in the helper.</p>
+<p>The first time you pick a manual mode, StatBar registers its helper and opens <strong>System Settings › General › Login Items</strong> so you can approve it. This happens only after your click, and at most once a minute. Until you approve, the status line in the Fan Control menu reads "Helper: approve in System Settings › Login Items". Other states are "Helper: ready" and "Helper: controlling fans".</p>
+<p><strong>Safety fallbacks.</strong> Fans return to automatic when:</p>
+<ul>
+<li>you quit StatBar, or it crashes;</li>
+<li>the Mac goes to sleep;</li>
+<li>the helper hears nothing from StatBar for 30 seconds. StatBar re-sends at least every 10 seconds while a manual mode is on.</li>
+</ul>
+<p>If the temperature reading is missing in Follow mode, StatBar hands the fans back to macOS rather than guessing. Fans and the helper cannot be exercised without root and your approval, so they have not been tested on every Mac model. Try a manual mode while you are watching the Fans row.</p>
+<p><strong>Remove Fan Helper</strong> (at the bottom of the Fan Control menu) sets the mode back to Automatic and unregisters the helper.</p>
+<h2 id="permissions-and-privacy">Permissions and privacy</h2>
+<p>StatBar is built around one rule: ask once, only when asked, never again.</p>
+<ul>
+<li><strong>At launch, nothing.</strong> No permission prompt, no network request, no window.</li>
+<li><strong>Launch at Login</strong> asks macOS to register a login item, when you choose it.</li>
+<li><strong>The helper</strong> (fan control or Include System Processes) needs a one-time approval in Login Items, when you pick a manual fan mode or switch on Include System Processes.</li>
+<li><strong>Weather</strong> uses the network, when you switch it on.</li>
+<li>A declined or pending approval is shown as status text in the menu. StatBar does not keep asking, and opens System Settings at most once a minute, and only from a click.</li>
+</ul>
+<p>StatBar does not use, and never asks for: Accessibility, Location, Automation, Full Disk Access, Screen Recording, Contacts or notifications. The Wi-Fi network name is deliberately not shown, because macOS gates it behind Location.</p>
+<p><strong>Data.</strong> No telemetry, no analytics, no accounts, no tracking, no update checker. <strong>Check for Updates...</strong> only opens the Gumroad product page in your browser. The app keeps no history of your readings. Its settings are stored locally in your user preferences.</p>
+<p><strong>Not sandboxed, on purpose.</strong> StatBar is distributed directly rather than through the Mac App Store because the App Store sandbox does not allow the kernel interfaces it uses to read stats without subprocesses. That is why it is a direct download.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><strong>StatBar is not in my menu bar.</strong> On a crowded menu bar, macOS can hide the right-hand items behind the <strong>»</strong> arrow. Turn off one or two stats in the menu to make the readout narrower, or quit another menu bar app. On a Mac with a notch, items that do not fit are hidden.</p>
+<p><strong>A value shows an em dash, "unavailable" or "none".</strong> That reading is not available on this Mac (a desktop has no battery, some Macs have no fans), or it is the first sample after a pause and needs one more tick.</p>
+<p><strong>The first values look strange.</strong> CPU, network and process rates need two samples. Give it a tick.</p>
+<p><strong>The helper says "Helper: approve in System Settings › Login Items".</strong> Open <strong>System Settings › General › Login Items</strong>, and under <strong>Allow in the Background</strong> switch <strong>StatBar</strong> on. If you dismissed the prompt, choose the fan mode or the Include System Processes setting again.</p>
+<p><strong>"Helper not installed" or "Helper missing from the app bundle".</strong> Choose <strong>Remove Fan Helper</strong>, then pick a fan mode (or toggle Include System Processes off and on) to register it again. "Missing from the app bundle" means the app was modified or damaged; download it again.</p>
+<p><strong>Launch at Login will not turn on, or the helper keeps asking after every update.</strong> macOS ties these approvals to the app's code identity. Keep StatBar in <strong>Applications</strong>, and use the official download. A copy you compile yourself with no signing certificate gets a new identity on every build, so macOS asks again each time.</p>
+<p><strong>Reset all settings.</strong> Quit StatBar, then in Terminal run <code>defaults delete local.statbar.StatBar</code>, and open it again. This clears your stat toggles, interval, theme, sort choices, Weather location and fan mode.</p>
+<p><strong>Something looks wrong.</strong> Choose <strong>Help › Report a Problem...</strong> to start an email with your StatBar and macOS versions filled in. The address is iantrimble@remnantsecurity.com.</p>
+<h3 id="uninstall">Uninstall</h3>
+<ol type="1">
+<li>If you used fan control or Include System Processes, choose <strong>Fan Control › Remove Fan Helper</strong>. This returns the fans to Automatic and unregisters the helper.</li>
+<li>If you turned on Launch at Login, choose <strong>Launch at Login</strong> again to turn it off.</li>
+<li>Open <strong>System Settings › General › Login Items</strong> and confirm StatBar is not listed under <strong>Open at Login</strong> or switched on under <strong>Allow in the Background</strong>. Switch it off if it is.</li>
+<li>Choose <strong>Quit StatBar</strong>.</li>
+<li>Drag <strong>StatBar.app</strong> from Applications to the Trash.</li>
+<li>Optional: remove your settings with <code>defaults delete local.statbar.StatBar</code>.</li>
+</ol>
+<p>Free Up Space does not install anything and leaves nothing behind. The folders it cleans belong to the other tools.</p>
+<h2 id="faq">FAQ</h2>
+<p><strong>What do I get for $9.95?</strong> StatBar.app and a license for every Mac you personally own, with updates included. The download also includes the complete Swift source (<code>Sources/main.swift</code>), the build scripts and the icon.</p>
+<p><strong>How do I get updates?</strong> Gumroad emails you when a new version is published. <strong>Check for Updates...</strong> opens the product page in your browser. The app never checks on its own.</p>
+<p><strong>Can I use it on more than one Mac?</strong> Yes. The license covers every Mac you personally own. Install it on each. It does not cover redistributing or reselling it.</p>
+<p><strong>Is it on the Mac App Store?</strong> No. See "Not sandboxed, on purpose".</p>
+<p><strong>Does it use the internet?</strong> Only if you turn on Weather. Out of the box it makes no network requests at all.</p>
+<p><strong>How much does it cost my Mac to run it?</strong> StatBar uses one timer, one small sampler per stat, and no polling subprocesses. In a measurement on the developer's Mac on 12 September 2026, an earlier build used about 16 MiB of memory and about 0.03% of one core with the Monitors window closed, and about 50 MiB with it open. Results vary by Mac and load.</p>
+<p><strong>Why is my CPU percentage over 100%?</strong> In the CPU monitor and Top Offenders, 100% is one core, so an app using several cores can exceed it. The bar's CPU figure is the total across all cores, out of 100%.</p>
+<p><strong>Why do some processes show a lower memory number than Activity Monitor?</strong> StatBar shows physical footprint, including compressed memory. Activity Monitor can show a different column.</p>
+<p><strong>Why can't I stop some processes?</strong> The buttons work only on processes you own, never on StatBar, launchd or system processes. macOS can still refuse a protected process.</p>
+<p><strong>Does Free Up Space delete my projects?</strong> No. It only clears fixed cache and leftover folders listed above, and never touches Documents, Desktop, Downloads or your project folders. Review items are only shown, never deleted.</p>
+<p><strong>It said something was "left alone". Why?</strong> It was changed in the last ten minutes, or was on another volume. Run it again later.</p>
+<p><strong>Does it work with the tools I use?</strong> Free Up Space knows the locations listed in this guide. Tools that keep caches elsewhere are not covered, and StatBar does not guess.</p>
+<p><strong>I am colorblind. Will it work?</strong> Yes. Choose Colorblind-friendly or Monochrome in <strong>Settings › Color Theme</strong>. Critical also uses a filled chip and every color sits beside a number.</p>
+<p><strong>Can I add my own stat?</strong> The source is included. Each stat is one small sampler class, and the code is made to be read and changed, by you or by your AI coding agent.</p>
+<h2 id="keyboard-shortcuts">Keyboard shortcuts</h2>
+<p>StatBar lives in the menu bar, so its shortcuts work while its menu is open.</p>
+<div class="tw" tabindex="0" role="region" aria-label="Table, scrolls sideways on narrow screens"><table>
+<thead>
+<tr>
+<th>Shortcut</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command-M</td>
+<td>Open Monitors</td>
+</tr>
+<tr>
+<td>Command-? (Command-Shift-/)</td>
+<td>StatBar Help</td>
+</tr>
+<tr>
+<td>Command-Q</td>
+<td>Quit StatBar</td>
+</tr>
+<tr>
+<td>Return</td>
+<td>Confirm the default button in a dialog (Use This Location in the Weather picker; Clean Selected in Free Up Space)</td>
+</tr>
+<tr>
+<td>Escape</td>
+<td>Cancel the Weather location picker</td>
+</tr>
+<tr>
+<td>Up / Down arrows</td>
+<td>Move through the menu, and through rows in the Monitors table</td>
+</tr>
+</tbody>
+</table></div>
+<p>The destructive confirmation dialogs in Monitors have <strong>Cancel</strong> as the default, so pressing Return cancels them.</p>
+<h2 id="getting-help">Getting help</h2>
+<ul>
+<li><strong>Help › StatBar Help</strong> opens a short quick start inside the app.</li>
+<li><strong>Help › User Guide (online)</strong> opens this guide.</li>
+<li><strong>Help › Report a Problem...</strong> starts an email to iantrimble@remnantsecurity.com with your versions filled in.</li>
+</ul>
+
+</main>
+</div>
+<script>if(matchMedia('(max-width:860px)').matches){var d=document.querySelector('aside details');if(d)d.open=false}</script>
+<footer><p>© 2026 Remnant Security · <a href="../">StatBar</a> · <a href="https://apps.remnantsecurity.com/">More apps</a></p></footer>
+</body>
+</html>
