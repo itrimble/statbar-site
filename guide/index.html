@@ -149,9 +149,13 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <td>WX</td>
 <td>Current temperature for your city, if you turned Weather on and chose <strong>Show in Menu Bar</strong></td>
 </tr>
+<tr>
+<td>AI</td>
+<td>Memory held by recognized AI and developer tools, colored by share of your RAM. Off by default; see <a href="#the-ai-column-in-the-menu-bar">The AI column in the menu bar</a></td>
+</tr>
 </tbody>
 </table></div>
-<p>Turn stats on and off with the checkable rows in the menu (CPU, GPU, Memory, Disk, Network, Battery, Temperature, Fans). A stat that is off is hidden and <strong>not measured at all</strong>, so it costs nothing.</p>
+<p>Turn stats on and off with the checkable rows in the menu (CPU, GPU, Memory, Disk, Network, Battery, Temperature, Fans, AI Tools Memory). Everything is on by default except AI Tools Memory. A stat that is off is hidden and <strong>not measured at all</strong>, so it costs nothing.</p>
 <p>If a stat is not available on your Mac, for example a battery on a desktop, it is left out of the bar. In the menu its row reads "unavailable" or "none".</p>
 <p>Readings refresh every 2 seconds by default. Choose 1, 2, 5 or 10 seconds in <strong>Settings › Update Interval</strong>. StatBar stops sampling while the system or the display sleeps and starts again when both are awake.</p>
 <h2 id="what-the-colors-mean">What the colors mean</h2>
@@ -247,7 +251,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p>Click the bar to open the menu, from top to bottom:</p>
 <ol type="1">
 <li><strong>This Mac</strong>: your Mac's marketing name, its artwork in this unit's color, chip, memory, startup disk, serial number and macOS version, like About This Mac.</li>
-<li><strong>Live readings</strong>: CPU (with user and system split), Load (1, 5 and 15 minute averages), GPU, Memory (used and total, with swap and how much is free for models), Disk (used and total, and a forecast row when it is filling), Net (current rates, and session totals underneath), Battery (state and time remaining, with health and power lines), Temp (CPU average, hottest CPU sensor, GPU), Thermal (how hard macOS is throttling), Fans (RPM per fan, and auto or manual) and Weather when it is on. Click CPU, Mem, Disk, Net, GPU or Bat to open that monitor.</li>
+<li><strong>Live readings</strong>: CPU (with user and system split), Load (1, 5 and 15 minute averages), GPU, Memory (used and total, with swap and how much is free for models), Disk (used and total, and a forecast row when it is filling), Net (current rates, and session totals underneath), Battery (state and time remaining, with health and power lines), Temp (CPU average, hottest CPU sensor, GPU), Thermal (how hard macOS is throttling), Fans (RPM per fan, and auto or manual) and Weather when it is on. GPU also shows the memory in use. Click CPU, Mem, Disk, Net, GPU or Bat to open that monitor.</li>
 <li><strong>Top Offenders</strong>.</li>
 <li><strong>Open Monitors...</strong>, <strong>Free Up Space...</strong> and <strong>Copy Status for AI Agent</strong>.</li>
 <li>The stat toggles, then <strong>Fan Control</strong>, <strong>Settings</strong>, <strong>Launch at Login</strong>, <strong>Help</strong>, <strong>About StatBar</strong>, <strong>Check for Updates...</strong> and <strong>Quit StatBar</strong>.</li>
@@ -264,7 +268,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </ul>
 <p><strong>Why there is no per-app network.</strong> macOS exposes per-app network traffic only through a command-line subprocess (<code>nettop</code>) or a private framework. StatBar uses neither: it runs no subprocesses to take readings and uses no private interfaces. The Network monitor shows per-interface totals instead. The GPU monitor likewise shows the whole device, not per-app GPU use.</p>
 <h2 id="monitors">Monitors</h2>
-<p>Choose <strong>Open Monitors...</strong> (Command-M while the menu is open), or click a reading in the menu. The window has one tab each for <strong>CPU</strong>, <strong>Memory</strong>, <strong>Disk</strong>, <strong>Network</strong>, <strong>GPU</strong> and <strong>Battery</strong>. Detail sampling runs only while the window is visible and not paused. Closing, hiding or minimizing it, or sleeping the Mac, stops it.</p>
+<p>Choose <strong>Open Monitors...</strong> (Command-M while the menu is open), or click a reading in the menu. The window has one tab each for <strong>CPU</strong>, <strong>Memory</strong>, <strong>Disk</strong>, <strong>Network</strong>, <strong>GPU</strong>, <strong>Battery</strong> and <strong>Ports</strong>. Detail sampling runs only while the window is visible and not paused. Closing, hiding or minimizing it, or sleeping the Mac, stops it.</p>
 <h3 id="the-tabs">The tabs</h3>
 <ul>
 <li><strong>CPU</strong>: a bar for every core, with efficiency and performance cores averaged separately on Apple silicon, above a process list. Columns: Process, PID, CPU %, Parent, User. 100% means one full core.</li>
@@ -273,6 +277,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li><strong>Network</strong>: interfaces with Download/s, Upload/s, Received, Sent and Link. Wi-Fi shows signal strength, link rate and channel; the network name is deliberately not shown (see Permissions). VPN, loopback and physical interfaces can count overlapping traffic, so do not add them.</li>
 <li><strong>GPU</strong>: device utilization, renderer and tiler load, memory in use and core count.</li>
 <li><strong>Battery</strong>: charge, status, time estimate, health, cycle count, power flow, and adapter wattage. Desktop Macs show "No battery reading available".</li>
+<li><strong>Ports</strong>: the TCP ports your processes are listening on. See <a href="#the-ports-tab">The Ports tab</a>.</li>
 </ul>
 <p>The first CPU or network reading after opening or resuming is a baseline and shows an em dash. Real values follow on the next sample.</p>
 <h3 id="sorting-search-filter">Sorting, search, filter</h3>
@@ -335,6 +340,24 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li>macOS may still refuse to stop a protected process. StatBar shows the error.</li>
 <li>Nothing is ever stopped automatically.</li>
 </ul>
+<h3 id="the-ports-tab">The Ports tab</h3>
+<p>Ports answers "what is holding :3000?" It lists every TCP port one of your own processes is listening on, with these columns:</p>
+<ul>
+<li><strong>Process</strong>: the name of the process.</li>
+<li><strong>Port</strong>: the port number.</li>
+<li><strong>PID</strong>: its process ID.</li>
+<li><strong>Reachable from</strong>: <strong>This Mac only</strong> when it listens on the loopback address (127.0.0.1 or ::1), <strong>Network (all)</strong> when it listens on every interface, and <strong>Network</strong> when it is bound to one specific non-loopback address. "Network (all)" means other devices on your network may be able to connect, subject to your firewall; check anything you did not mean to expose.</li>
+<li><strong>Started by</strong>: what started it, as a process name and PID, for example <code>npm (20395)</code>.</li>
+</ul>
+<p>Select a row and use <strong>Stop Process...</strong> or <strong>Force Stop...</strong> under the table, with the same confirmations and rules as in <a href="#quit-force-quit-stop">Quit, Force Quit, Stop</a>. The search box matches the process name.</p>
+<p>Safety notes:</p>
+<ul>
+<li>Ports are read with libproc, the same system calls the other monitors use. StatBar runs no <code>lsof</code>, no <code>netstat</code> and no other subprocess, and sends no traffic to the ports.</li>
+<li><strong>Only your own processes are listed.</strong> macOS does not let an ordinary app see other users' or system processes' sockets, and this tab does not use the root helper. A port held by a system service or another user will not appear, and cannot be stopped from here.</li>
+<li>Only TCP listeners are shown. UDP sockets and connections that are not listening are not.</li>
+<li>StatBar never lists or stops itself or launchd. The stop is checked against the process's identity after you confirm, so a reused PID is refused rather than hitting the wrong process.</li>
+<li>Sampling runs only while the Ports tab is on screen and not paused.</li>
+</ul>
 <h2 id="for-ai-developers">For AI developers</h2>
 <p>Coding agents and local models are heavy tenants: they hold gigabytes of memory, spawn long chains of helper processes, fill the disk with downloads and builds, and push the Mac into thermal throttling. StatBar has a few features aimed at that. All of them read the same process list the Monitors window uses. Nothing is sent anywhere.</p>
 <h3 id="how-tools-are-recognized">How tools are recognized</h3>
@@ -343,10 +366,14 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <h3 id="ai-tools-in-top-offenders">AI Tools in Top Offenders</h3>
 <p>Choose <strong>AI Tools</strong> in the Top Offenders switch. It lists the three tools using the most memory right now, each with a line such as <code>4.2 GB · 38% · 12 processes</code>: memory, CPU (as a percentage of one core, so it can exceed 100%) and process count, totalled over everything charged to that tool. Memory is physical footprint. Nothing is listed when none of the listed tools is running.</p>
 <p>In the Monitors window, the CPU and Memory tabs have an <strong>AI &amp; Dev Tools</strong> option in the process filter. It shows only processes that belong to a recognized tool, using the same rules. Combine it with <strong>Hierarchy</strong> to see what each tool has running underneath it.</p>
+<h3 id="the-ai-column-in-the-menu-bar">The AI column in the menu bar</h3>
+<p>You can add an <strong>AI</strong> column to the bar itself. It shows the total memory held by recognized AI and developer tools, colored by that memory's share of your RAM, and uses the same recognition rules as the AI Tools view. It is <strong>off by default</strong>.</p>
+<p>To turn it on, choose <strong>AI Tools Memory</strong> in the menu, in the same list of checkable rows as CPU and GPU (a check mark means it is on). Choose it again to turn it off. While it is off, StatBar does not measure it at all. When none of the listed tools is running, it reads a zero amount of memory.</p>
 <h3 id="memory-headroom-thermal-state-and-disk-forecast">Memory headroom, thermal state and disk forecast</h3>
 <p>Three extra lines in the menu answer "can this Mac take another job right now?":</p>
 <ul>
 <li><strong>Under Memory:</strong> <code>swap 1.2 GB · 18 GB free for models</code>. Swap is how much memory has spilled to disk; a model that spills into swap runs very slowly. "Free for models" is free memory plus reclaimable file cache, capped at the amount macOS allows the GPU to map for Metal. Treat it as roughly the largest model that fits right now, not a guarantee: other apps can take memory before you load one, and a model needs room for its working data as well as its weights. Hover over the row for the cap on your Mac.</li>
+<li><strong>GPU:</strong> the GPU row shows memory in use beside the utilization, for example <code>GPU 46.0%  11.4GB in use</code>. On Apple silicon the GPU shares the Mac's memory, so this is memory a model or a render currently has mapped. The figure is left off where macOS does not report it.</li>
 <li><strong>Thermal:</strong> <code>nominal</code>, <code>fair</code>, <code>serious</code> or <code>critical</code>, as reported by macOS, with "Low Power Mode" added when it is on. Serious and critical mean the Mac is slowing itself down, which long agent runs and local models can cause.</li>
 <li><strong>Under Disk:</strong> <code>filling +2.1 GB/h · full in ~9.0 h</code>. This row appears only while the disk is filling, which means used space has grown by at least 200 MB per hour over at least ten minutes of history. It is a straight-line estimate from that window, so a download that finishes or a cache that is cleared changes it. It is not shown when the disk is steady or emptying, and not right after launch, because StatBar keeps no history between launches.</li>
 </ul>
@@ -616,10 +643,12 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p><strong>How much does it cost my Mac to run it?</strong> StatBar uses one timer, one small sampler per stat, and no polling subprocesses. In a measurement on the developer's Mac on 12 September 2026, an earlier build used about 16 MiB of memory and about 0.03% of one core with the Monitors window closed, and about 50 MiB with it open. Results vary by Mac and load.</p>
 <p><strong>Why is my CPU percentage over 100%?</strong> In the CPU monitor and Top Offenders, 100% is one core, so an app using several cores can exceed it. The bar's CPU figure is the total across all cores, out of 100%.</p>
 <p><strong>Why do some processes show a lower memory number than Activity Monitor?</strong> StatBar shows physical footprint, including compressed memory. Activity Monitor can show a different column.</p>
+<p><strong>Why is a port missing from the Ports tab?</strong> Only TCP ports that your own processes are listening on are shown. A port held by a system service or another user, or a UDP port, does not appear, and StatBar cannot stop those.</p>
 <p><strong>Why can't I stop some processes?</strong> The buttons work only on processes you own, never on StatBar, launchd or system processes. macOS can still refuse a protected process.</p>
 <p><strong>Does Free Up Space delete my projects?</strong> No. It only clears fixed cache and leftover folders listed above, and never touches Documents, Desktop, Downloads or your project folders. Review items are only shown, never deleted.</p>
 <p><strong>It said something was "left alone". Why?</strong> It was changed in the last ten minutes, or was on another volume. Run it again later.</p>
 <p><strong>Does it work with the tools I use?</strong> Free Up Space knows the locations listed in this guide. Tools that keep caches elsewhere are not covered, and StatBar does not guess.</p>
+<p><strong>The AI column is not in my bar.</strong> It is off by default. Choose <strong>AI Tools Memory</strong> in the menu. It reads zero when no recognized tool is running.</p>
 <p><strong>I am colorblind. Will it work?</strong> Yes. Choose Colorblind-friendly or Monochrome in <strong>Settings › Color Theme</strong>. Critical also uses a filled chip and every color sits beside a number.</p>
 <p><strong>Can I add my own stat?</strong> The source is included. Each stat is one small sampler class, and the code is made to be read and changed, by you or by your AI coding agent.</p>
 <h2 id="keyboard-shortcuts">Keyboard shortcuts</h2>
