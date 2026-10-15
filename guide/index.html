@@ -407,7 +407,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 /Applications/StatBar.app/Contents/MacOS/StatBar --snapshot --with-cleanup</code></pre>
 <ul>
 <li>It prints Markdown by default, or JSON with <code>--json</code>, and exits. It takes about three seconds, because rates need two samples. It does not need a running StatBar and does not touch the menu bar.</li>
-<li><code>--with-cleanup</code> adds the sizes of the caches Free Up Space knows about, largest first. <strong>It only measures. Nothing is deleted.</strong> Deleting is done only from the Free Up Space window, with your confirmation.</li>
+<li><code>--with-cleanup</code> adds the sizes of the caches Free Up Space knows about, largest first. <strong>It only measures. Nothing is deleted.</strong> Deleting is done from the Free Up Space window, with your confirmation, or from the command line with an explicit <code>--yes</code> (see <a href="#clean-from-a-terminal-or-every-mac-at-once">Clean from a terminal, or every Mac at once</a>).</li>
 <li>It reads only what the app already reads, includes no serial number, and makes no request beyond this Mac (if Ollama is running it is asked, over 127.0.0.1, which model is loaded).</li>
 </ul>
 <p>A sentence in your agent's instructions, such as "run <code>StatBar --snapshot</code> before starting a large build or loading a local model", is enough to put it to use.</p>
@@ -624,6 +624,39 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p>On Macs that have an energy mode, the menu shows a <strong>Power Mode</strong> switch with three choices: <strong>Low Power</strong> (cooler, quieter, and longer battery life), <strong>Automatic</strong> (macOS decides), and <strong>High Power</strong> (sustained speed under heavy load, on the Macs that offer it, such as some MacBook Pro and Mac Studio models). A Mac with no energy mode, such as many desktops, does not show the switch, and a choice the Mac does not support is greyed out.</p>
 <p>macOS only lets an administrator change this, so the first time you pick a mode StatBar asks you to approve its helper in <strong>System Settings › General › Login Items</strong>, exactly as for fan control, and only after your click. The helper runs <code>/usr/bin/pmset</code> with a fixed command for the mode you chose, then reads the setting back to confirm it took. If it did not, the switch returns to what the Mac is really doing and says why.</p>
 <p>It changes the same persistent setting as <strong>System Settings › Battery › Energy Mode</strong>, for the power source you are on right now (battery or adapter), as System Settings does, so the other profile is left alone. It stays until you change it again. Reading the current mode needs no approval and happens only when the menu opens. The mode also appears in the status snapshot.</p>
+<h3 id="clean-from-a-terminal-or-every-mac-at-once">Clean from a terminal, or every Mac at once</h3>
+<p><code>StatBar --clean</code> does what the Free Up Space window does, without a window. It works over SSH, on a Mac mini with no screen, from a script, or from a coding agent. <strong>It never deletes anything unless you add <code>--yes</code>.</strong></p>
+<pre class="sh"><code>S=/Applications/StatBar.app/Contents/MacOS/StatBar
+$S --clean --list                # what could be cleared on this Mac, with sizes (changes nothing)
+$S --clean --safe                # DRY RUN of the items the window pre-ticks (changes nothing)
+$S --clean uv npm                # DRY RUN of just those items (ids come from --list)
+$S --clean --safe --yes          # actually clean the pre-ticked items
+$S --clean uv npm --yes          # actually clean just those
+$S --clean --safe --json         # the same, machine readable</code></pre>
+<p>It is the same engine as the window, so it keeps every safety rule: only a fixed table of cache folders can be named (anything else is refused, with exit status 3), review-only items such as models, VMs, archives and the Trash are refused even with <code>--yes</code>, only the contents of a folder are removed, anything changed in the last ten minutes is left alone, DerivedData is refused while Xcode is running, and Docker is pruned only for a local engine. Exit status is 0 when done, 2 for bad usage, 3 when an id was refused and 4 when something failed. Nothing is read from standard input.</p>
+<p><strong>Every Mac at once.</strong> <code>scripts/fleet.sh</code> runs it over SSH on each Mac you list, with the same rules on each:</p>
+<pre class="sh"><code>bash scripts/fleet.sh local mbp mini -- --safe          # dry run on this Mac, &quot;mbp&quot; and &quot;mini&quot;
+bash scripts/fleet.sh mbp mini -- --safe --yes          # then clean them, once you have read the dry run</code></pre>
+<p>A dry run across three real Macs looks like this (abridged: a few small items are left out; sizes are what each Mac reported; nothing was deleted):</p>
+<pre><code>=== macbook-neo ===
+| Item                         | Size   | Result      |
+| uv cache (uv)                | 9.3GB  | would-clean |
+| npm cache (npm)              | 6.8GB  | would-clean |
+| Homebrew downloads (brew)    | 4.3GB  | would-clean |
+Would free about 20.4GB.
+
+=== macbook-pro ===
+| uv cache (uv)                | 20.8GB | would-clean |
+Would free about 20.8GB.
+
+=== mac-mini ===
+| uv cache (uv)                | 25.5GB | would-clean |
+| npm cache (npm)              | 9.8GB  | would-clean |
+| Homebrew downloads (brew)    | 7.2GB  | would-clean |
+| Xcode DerivedData (derived)  | 4.4GB  | would-clean |
+| pip cache (pip)              | 1.7GB  | would-clean |
+Would free about 48.8GB.</code></pre>
+<p>That is about 90 GB reclaimable across the three Macs, found and reviewed from one terminal. StatBar has to be installed on each Mac you list, and one license covers unlimited Macs. Passwordless SSH (keys) is recommended, because the script uses non-interactive SSH. Without <code>--yes</code> it only reports.</p>
 <h2 id="permissions-and-privacy">Permissions and privacy</h2>
 <p>StatBar is built around one rule: ask once, only when asked, never again.</p>
 <ul>
