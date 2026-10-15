@@ -573,7 +573,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </ul>
 <p>When it finishes, the status line reads, for example, "Freed 4.2 GB, 3 left alone". Hover over it to see which items were skipped or failed and why. The list then rescans.</p>
 <h3 id="several-macs">Several Macs</h3>
-<p>Free Up Space cleans <strong>only the Mac it runs on</strong>. To clean another Mac, run StatBar there. Your license covers every Mac you personally own, so install it on each.</p>
+<p>Free Up Space cleans <strong>only the Mac it runs on</strong>. To clean another Mac, run StatBar there. One license works on unlimited Macs, so install it on each.</p>
 <h2 id="settings">Settings</h2>
 <p>Open them from <strong>Settings</strong> in the menu.</p>
 <ul>
@@ -656,9 +656,10 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </ol>
 <p>Free Up Space does not install anything and leaves nothing behind. The folders it cleans belong to the other tools.</p>
 <h2 id="faq">FAQ</h2>
-<p><strong>What do I get for $9.95?</strong> StatBar.app and a license for every Mac you personally own, with updates included. The download also includes the complete Swift source (<code>Sources/main.swift</code>), the build scripts and the icon.</p>
+<p><strong>What do I get for $9.95?</strong> StatBar.app and a lifetime license that works on unlimited Macs, with updates and email support for life. It is a single payment: there is no subscription. The download also includes the complete Swift source (<code>Sources/main.swift</code>), the build scripts and the icon.</p>
 <p><strong>How do I get updates?</strong> Gumroad emails you when a new version is published. <strong>Check for Updates...</strong> opens the product page in your browser. The app never checks on its own.</p>
-<p><strong>Can I use it on more than one Mac?</strong> Yes. The license covers every Mac you personally own. Install it on each. It does not cover redistributing or reselling it.</p>
+<p><strong>Can I use it on more than one Mac?</strong> Yes. One license works on unlimited Macs. Install it on each; there is no activation and no limit to count. It does not cover redistributing or reselling it.</p>
+<p><strong>Is there a subscription, or do I pay for support?</strong> No. It is a single payment. Updates and email support (iantrimble@remnantsecurity.com) are for life, at no extra cost.</p>
 <p><strong>Is it on the Mac App Store?</strong> No. See "Not sandboxed, on purpose".</p>
 <p><strong>Does it use the internet?</strong> Only if you turn on Weather. Out of the box it makes no request off your Mac. The one local exception: when Ollama is running, StatBar asks it over 127.0.0.1 which model is loaded.</p>
 <p><strong>How much does it cost my Mac to run it?</strong> StatBar uses one timer, one small sampler per stat, and no polling subprocesses. Measured on 15 October 2026 on three Macs (a MacBook Neo, a MacBook Pro with an M4 Max and a Mac mini with an M4) over 20 seconds with the Monitors window closed, it used 16.6 to 17.1 MiB of memory, 0.02 to 0.04% of one core, and 0 to 0.6 wakeups per second. With the Monitors window open it holds about 50 MiB. A good part of that is macOS's own window and control machinery, which macOS does not fully give back when the window closes, so memory settles near 50 MiB after the first time you open it, until you restart StatBar. Results vary by Mac and load.</p>
