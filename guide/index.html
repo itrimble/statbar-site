@@ -286,6 +286,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li><strong>Search</strong> matches a name, an exact PID, or part of an executable's path. On Disk it matches a volume name or path.</li>
 <li><strong>All Processes / Apps Only / AI &amp; Dev Tools</strong> (CPU and Memory) limits the list to real applications, or to processes that belong to an AI or developer tool (see <a href="#for-ai-developers">For AI developers</a>). It is remembered.</li>
 <li><strong>Hierarchy</strong> nests each process under the one that started it, so you can see everything one tool is responsible for. Searching keeps a match's parents visible. Turn it off for a flat list sorted across every process. It is off by default and remembered.</li>
+<li><strong>Icons</strong> shows each app's own icon beside its name, the same one you see in the Dock and Finder, found from the app's bundle. Processes that are not apps (scripts, daemons) get a plain executable icon. Untick it for a text-only table. It applies to the process tabs and the Ports tab, is on by default, and is remembered.</li>
 <li><strong>Pause</strong> freezes the list. <strong>Resume</strong> takes fresh baselines. The footer shows Live, Paused or Sleeping, how many items are shown, and the time of the last sample.</li>
 </ul>
 <h3 id="the-parent-column">The Parent column</h3>
@@ -370,7 +371,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p>Two things are flagged, and only among your own processes:</p>
 <ul>
 <li><strong>Spinning.</strong> Using at least 80% of a core right now, having averaged at least 60% of a core over a lifetime of 15 minutes or more.</li>
-<li><strong>Left behind.</strong> Its agent has exited, so launchd now owns it, and it is still using real CPU (5% or more) or 200 MB or more of memory. This relies on StatBar having watched it start.</li>
+<li><strong>Left behind.</strong> Its agent has exited, so launchd now owns it, and it is still using real CPU (5% or more) or 200 MB or more of memory. This relies on StatBar having watched it start since StatBar launched.</li>
 </ul>
 <p>It cannot tell a stuck process from a long build or test run, which is why it says <em>may be</em>. Editors, Ollama, Docker and Xcode builds are busy by design and are not judged. Nothing is stopped for you; use Stop Process in Monitors, which asks first. The same list appears in the status snapshot.</p>
 <h3 id="which-ollama-model-is-loaded">Which Ollama model is loaded</h3>
@@ -621,7 +622,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <h3 id="power-mode">Power Mode</h3>
 <p>On Macs that have an energy mode, the menu shows a <strong>Power Mode</strong> switch with three choices: <strong>Low Power</strong> (cooler, quieter, and longer battery life), <strong>Automatic</strong> (macOS decides), and <strong>High Power</strong> (sustained speed under heavy load, on the Macs that offer it, such as some MacBook Pro and Mac Studio models). A Mac with no energy mode, such as many desktops, does not show the switch, and a choice the Mac does not support is greyed out.</p>
 <p>macOS only lets an administrator change this, so the first time you pick a mode StatBar asks you to approve its helper in <strong>System Settings › General › Login Items</strong>, exactly as for fan control, and only after your click. The helper runs <code>/usr/bin/pmset</code> with a fixed command for the mode you chose, then reads the setting back to confirm it took. If it did not, the switch returns to what the Mac is really doing and says why.</p>
-<p>It changes the same persistent setting as <strong>System Settings › Battery › Energy Mode</strong>, for both battery and power adapter, so it stays until you change it again. Reading the current mode needs no approval and happens only when the menu opens. The mode also appears in the status snapshot.</p>
+<p>It changes the same persistent setting as <strong>System Settings › Battery › Energy Mode</strong>, for the power source you are on right now (battery or adapter), as System Settings does, so the other profile is left alone. It stays until you change it again. Reading the current mode needs no approval and happens only when the menu opens. The mode also appears in the status snapshot.</p>
 <h2 id="permissions-and-privacy">Permissions and privacy</h2>
 <p>StatBar is built around one rule: ask once, only when asked, never again.</p>
 <ul>
