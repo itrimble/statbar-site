@@ -78,6 +78,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li><a href="#what-the-colors-mean">What the colors mean</a></li>
 <li><a href="#the-menu">The menu</a></li>
 <li><a href="#monitors">Monitors</a></li>
+<li><a href="#for-ai-developers">For AI developers</a></li>
 <li><a href="#free-up-space">Free Up Space</a></li>
 <li><a href="#settings">Settings</a></li>
 <li><a href="#permissions-and-privacy">Permissions and privacy</a></li>
@@ -89,7 +90,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <main id="guide">
 <h1>StatBar User Guide</h1>
 <p class="lead">Version 1.0.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
-<p>StatBar puts your Mac's vitals in the menu bar: CPU, GPU, memory, disk, network, battery, temperature and fans, plus optional weather. Click it for the details, open the Monitors window to see what is using your Mac, and use Free Up Space to clear the caches that developer tools and AI coding agents leave behind.</p>
+<p>StatBar puts your Mac's vitals in the menu bar: CPU, GPU, memory, disk, network, battery, temperature and fans, plus optional weather. Click it for the details, open the Monitors window to see what is using your Mac, and use Free Up Space to clear the caches that developer tools and AI coding agents leave behind. If you run AI coding tools or local models, see <a href="#for-ai-developers">For AI developers</a>.</p>
 <p>This guide matches StatBar 1.0.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
 <h2 id="install">Install</h2>
 <ol type="1">
@@ -246,18 +247,18 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p>Click the bar to open the menu, from top to bottom:</p>
 <ol type="1">
 <li><strong>This Mac</strong>: your Mac's marketing name, its artwork in this unit's color, chip, memory, startup disk, serial number and macOS version, like About This Mac.</li>
-<li><strong>Live readings</strong>: CPU (with user and system split), Load (1, 5 and 15 minute averages), GPU, Memory (used and total), Disk (used and total), Net (current rates, and session totals underneath), Battery (state and time remaining, with health and power lines), Temp (CPU average, hottest CPU sensor, GPU), Fans (RPM per fan, and auto or manual) and Weather when it is on. Click CPU, Mem, Disk, Net, GPU or Bat to open that monitor.</li>
+<li><strong>Live readings</strong>: CPU (with user and system split), Load (1, 5 and 15 minute averages), GPU, Memory (used and total, with swap and how much is free for models), Disk (used and total, and a forecast row when it is filling), Net (current rates, and session totals underneath), Battery (state and time remaining, with health and power lines), Temp (CPU average, hottest CPU sensor, GPU), Thermal (how hard macOS is throttling), Fans (RPM per fan, and auto or manual) and Weather when it is on. Click CPU, Mem, Disk, Net, GPU or Bat to open that monitor.</li>
 <li><strong>Top Offenders</strong>.</li>
-<li><strong>Open Monitors...</strong> and <strong>Free Up Space...</strong></li>
+<li><strong>Open Monitors...</strong>, <strong>Free Up Space...</strong> and <strong>Copy Status for AI Agent</strong>.</li>
 <li>The stat toggles, then <strong>Fan Control</strong>, <strong>Settings</strong>, <strong>Launch at Login</strong>, <strong>Help</strong>, <strong>About StatBar</strong>, <strong>Check for Updates...</strong> and <strong>Quit StatBar</strong>.</li>
 </ol>
 <p>Rows update only while the menu is open.</p>
 <h3 id="top-offenders">Top Offenders</h3>
-<p>A switch at the top of the section chooses <strong>CPU</strong>, <strong>Disk I/O</strong> or <strong>Energy</strong>, and the three heaviest apps right now are listed with their icons. StatBar remembers your choice.</p>
+<p>A switch at the top of the section chooses <strong>CPU</strong>, <strong>Disk I/O</strong>, <strong>Energy</strong> or <strong>AI Tools</strong>. The first three list the three heaviest apps right now, with their icons. <strong>AI Tools</strong> lists the three AI and developer tools using the most memory, each with its memory, CPU and process count (see <a href="#for-ai-developers">For AI developers</a>). StatBar remembers your choice.</p>
 <ul>
 <li>Helper processes are rolled up into their app, so a browser and its twenty helpers are one line.</li>
 <li>CPU is shown as a percentage of one core, so it can exceed 100% for an app using several cores. Energy is shown in watts. Disk I/O is bytes per second.</li>
-<li>Apps below a small floor (under 1% CPU, 10 KB/s of disk, or 0.05 W) are not listed, so a quiet Mac can show fewer than three.</li>
+<li>In the first three views, apps below a small floor (under 1% CPU, 10 KB/s of disk, or 0.05 W) are not listed, so a quiet Mac can show fewer than three. AI Tools lists only tools that are running.</li>
 <li>Sampling happens only while the menu is open. Rates need two samples, so the list appears about a second after you open the menu.</li>
 <li>Processes owned by the system are hidden from ordinary apps. Turn on <strong>Settings › Include System Processes</strong> if you want WindowServer, kernel_task and other root daemons to be counted.</li>
 </ul>
@@ -278,7 +279,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <ul>
 <li>Click a column heading to sort by it, and click it again to reverse. Each tab remembers its sort.</li>
 <li><strong>Search</strong> matches a name, an exact PID, or part of an executable's path. On Disk it matches a volume name or path.</li>
-<li><strong>All Processes / Apps Only</strong> (CPU and Memory) limits the list to real applications. It is remembered.</li>
+<li><strong>All Processes / Apps Only / AI &amp; Dev Tools</strong> (CPU and Memory) limits the list to real applications, or to processes that belong to an AI or developer tool (see <a href="#for-ai-developers">For AI developers</a>). It is remembered.</li>
 <li><strong>Hierarchy</strong> nests each process under the one that started it, so you can see everything one tool is responsible for. Searching keeps a match's parents visible. Turn it off for a flat list sorted across every process. It is off by default and remembered.</li>
 <li><strong>Pause</strong> freezes the list. <strong>Resume</strong> takes fresh baselines. The footer shows Live, Paused or Sleeping, how many items are shown, and the time of the last sample.</li>
 </ul>
@@ -334,6 +335,44 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li>macOS may still refuse to stop a protected process. StatBar shows the error.</li>
 <li>Nothing is ever stopped automatically.</li>
 </ul>
+<h2 id="for-ai-developers">For AI developers</h2>
+<p>Coding agents and local models are heavy tenants: they hold gigabytes of memory, spawn long chains of helper processes, fill the disk with downloads and builds, and push the Mac into thermal throttling. StatBar has a few features aimed at that. All of them read the same process list the Monitors window uses. Nothing is sent anywhere.</p>
+<h3 id="how-tools-are-recognized">How tools are recognized</h3>
+<p>StatBar recognizes tools by <strong>process names, executable paths and ancestry</strong>. It has a fixed list: Claude Code, Codex, Gemini CLI, Aider, Cursor, Windsurf, VS Code, the Claude app, ChatGPT, Ollama, LM Studio, llama.cpp, Jupyter, Docker, and Xcode and Simulators. A process belongs to a tool if its own name or path says so. Failing that, it belongs to a tool if something that started it does, so work a tool kicked off is charged to it: <code>python3.13 ← uv ← codex</code> counts as Codex.</p>
+<p>This is a heuristic, not a registry. A tool that is renamed, wrapped, or installed somewhere unusual can be missed, and an unrelated process that happens to be started by a tool is counted as that tool's. The ancestry part also depends on StatBar having watched the process start (see <a href="#the-parent-column">The Parent column</a>). A tool not on the list is not recognized.</p>
+<h3 id="ai-tools-in-top-offenders">AI Tools in Top Offenders</h3>
+<p>Choose <strong>AI Tools</strong> in the Top Offenders switch. It lists the three tools using the most memory right now, each with a line such as <code>4.2 GB · 38% · 12 processes</code>: memory, CPU (as a percentage of one core, so it can exceed 100%) and process count, totalled over everything charged to that tool. Memory is physical footprint. Nothing is listed when none of the listed tools is running.</p>
+<p>In the Monitors window, the CPU and Memory tabs have an <strong>AI &amp; Dev Tools</strong> option in the process filter. It shows only processes that belong to a recognized tool, using the same rules. Combine it with <strong>Hierarchy</strong> to see what each tool has running underneath it.</p>
+<h3 id="memory-headroom-thermal-state-and-disk-forecast">Memory headroom, thermal state and disk forecast</h3>
+<p>Three extra lines in the menu answer "can this Mac take another job right now?":</p>
+<ul>
+<li><strong>Under Memory:</strong> <code>swap 1.2 GB · 18 GB free for models</code>. Swap is how much memory has spilled to disk; a model that spills into swap runs very slowly. "Free for models" is free memory plus reclaimable file cache, capped at the amount macOS allows the GPU to map for Metal. Treat it as roughly the largest model that fits right now, not a guarantee: other apps can take memory before you load one, and a model needs room for its working data as well as its weights. Hover over the row for the cap on your Mac.</li>
+<li><strong>Thermal:</strong> <code>nominal</code>, <code>fair</code>, <code>serious</code> or <code>critical</code>, as reported by macOS, with "Low Power Mode" added when it is on. Serious and critical mean the Mac is slowing itself down, which long agent runs and local models can cause.</li>
+<li><strong>Under Disk:</strong> <code>filling +2.1 GB/h · full in ~9.0 h</code>. This row appears only while the disk is filling, which means used space has grown by at least 200 MB per hour over at least ten minutes of history. It is a straight-line estimate from that window, so a download that finishes or a cache that is cleared changes it. It is not shown when the disk is steady or emptying, and not right after launch, because StatBar keeps no history between launches.</li>
+</ul>
+<h3 id="copy-status-for-ai-agent">Copy Status for AI Agent</h3>
+<p>Choose <strong>Copy Status for AI Agent</strong> in the menu. After about three seconds StatBar puts a Markdown summary on the clipboard, ready to paste into a prompt. It covers:</p>
+<ul>
+<li>the Mac's marketing name, chip and macOS version;</li>
+<li>thermal state and Low Power Mode;</li>
+<li>CPU use, load averages and CPU temperature;</li>
+<li>memory used, pressure, swap, and the free-for-models figure;</li>
+<li>disk free space, and the battery;</li>
+<li>the top processes by CPU and by memory, each with what started it;</li>
+<li>the AI and developer tools running, with their totals.</li>
+</ul>
+<p>It contains no serial number. It is built on this Mac, copied to the clipboard, and sent nowhere.</p>
+<h3 id="the-command-line---snapshot">The command line: <code>--snapshot</code></h3>
+<p>Agents and scripts can ask for the same summary themselves, without opening the menu:</p>
+<pre class="sh"><code>/Applications/StatBar.app/Contents/MacOS/StatBar --snapshot
+/Applications/StatBar.app/Contents/MacOS/StatBar --snapshot --json
+/Applications/StatBar.app/Contents/MacOS/StatBar --snapshot --with-cleanup</code></pre>
+<ul>
+<li>It prints Markdown by default, or JSON with <code>--json</code>, and exits. It takes about three seconds, because rates need two samples. It does not need a running StatBar and does not touch the menu bar.</li>
+<li><code>--with-cleanup</code> adds the sizes of the caches Free Up Space knows about, largest first. <strong>It only measures. Nothing is deleted.</strong> Deleting is done only from the Free Up Space window, with your confirmation.</li>
+<li>It reads only what the app already reads, includes no serial number, and makes no network request.</li>
+</ul>
+<p>A sentence in your agent's instructions, such as "run <code>StatBar --snapshot</code> before starting a large build or loading a local model", is enough to put it to use.</p>
 <h2 id="free-up-space">Free Up Space</h2>
 <p>AI coding tools and developer workflows quietly fill a disk with caches that regenerate themselves: package downloads, build products, model files, simulators and container leftovers. <strong>Free Up Space...</strong> finds them, shows how big each one is, and clears the ones you tick.</p>
 <p>Open it from the menu. It scans when it opens, and <strong>Scan</strong> runs it again. Nothing is deleted without two clicks: tick items, choose <strong>Clean N Selected...</strong>, then confirm in a dialog that lists every item and size. The window also shows how much space is free on this Mac.</p>
@@ -424,8 +463,8 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </tr>
 <tr>
 <td>Hugging Face model cache</td>
-<td><code>~/.cache/huggingface</code></td>
-<td>Models and datasets re-download on use, which can be slow</td>
+<td><code>~/.cache/huggingface/hub</code></td>
+<td>Models re-download on use, which can be slow. Your login token and settings are kept</td>
 <td>No</td>
 </tr>
 <tr>
@@ -459,7 +498,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <tr>
 <td>Docker leftovers</td>
 <td><code>docker system prune -f</code></td>
-<td>Removes stopped containers, dangling images, unused networks and build cache. Running containers and volumes are kept. Shown only if Docker's command-line tool is installed (in <code>/usr/local/bin</code>, <code>/opt/homebrew/bin</code>, or the Docker app). Docker must be running for it to succeed.</td>
+<td>Removes stopped containers, dangling images, unused networks and build cache. Running containers and volumes are kept. Shown only if Docker's command-line tool is installed (in <code>/usr/local/bin</code>, <code>/opt/homebrew/bin</code>, or the Docker app). Docker must be running for it to succeed, and only a local engine is cleaned: if Docker is pointed at a remote host, StatBar skips it.</td>
 </tr>
 </tbody>
 </table></div>
@@ -607,7 +646,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </tr>
 <tr>
 <td>Return</td>
-<td>Confirm the default button in a dialog (Use This Location in the Weather picker; Clean Selected in Free Up Space)</td>
+<td>Confirm the default button in a dialog (Use This Location in the Weather picker). In the Free Up Space and Monitors confirmations the default is Cancel, so Return cancels</td>
 </tr>
 <tr>
 <td>Escape</td>
@@ -619,7 +658,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </tr>
 </tbody>
 </table></div>
-<p>The destructive confirmation dialogs in Monitors have <strong>Cancel</strong> as the default, so pressing Return cancels them.</p>
+<p>The destructive confirmation dialogs in Monitors and Free Up Space have <strong>Cancel</strong> as the default, so pressing Return cancels them. <strong>Copy Status for AI Agent</strong> has no keyboard shortcut.</p>
 <h2 id="getting-help">Getting help</h2>
 <ul>
 <li><strong>Help › StatBar Help</strong> opens a short quick start inside the app.</li>
