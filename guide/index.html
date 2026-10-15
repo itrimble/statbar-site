@@ -523,6 +523,11 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <td>Removes simulators whose runtime is gone, usually after an Xcode update. Shown only when there are some.</td>
 </tr>
 <tr>
+<td>Erase all simulator contents</td>
+<td><code>simctl shutdown all</code>, then <code>simctl erase all</code></td>
+<td>Resets every simulator to factory state: apps and their data are removed, simulators and runtimes are kept</td>
+</tr>
+<tr>
 <td>Docker leftovers</td>
 <td><code>docker system prune -f</code></td>
 <td>Removes stopped containers, dangling images, unused networks and build cache. Running containers and volumes are kept. Shown only if Docker's command-line tool is installed (in <code>/usr/local/bin</code>, <code>/opt/homebrew/bin</code>, or the Docker app). Docker must be running for it to succeed, and only a local engine is cleaned: if Docker is pointed at a remote host, StatBar skips it.</td>
