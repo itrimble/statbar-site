@@ -89,9 +89,9 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </ol></details></nav></aside>
 <main id="guide">
 <h1>StatBar User Guide</h1>
-<p class="lead">Version 1.0.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
+<p class="lead">Version 1.1.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
 <p>StatBar puts your Mac's vitals in the menu bar: CPU, GPU, memory, disk, network, battery, temperature and fans, plus optional weather. Click it for the details, open the Monitors window to see what is using your Mac, and use Free Up Space to clear the caches that developer tools and AI coding agents leave behind. If you run AI coding tools or local models, see <a href="#for-ai-developers">For AI developers</a>.</p>
-<p>This guide matches StatBar 1.0.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
+<p>This guide matches StatBar 1.1.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
 <h2 id="install">Install</h2>
 <ol type="1">
 <li>Open the download and drag <strong>StatBar.app</strong> into your <strong>Applications</strong> folder.</li>
@@ -257,6 +257,9 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li>The stat toggles, then <strong>Fan Control</strong>, <strong>Settings</strong>, <strong>Launch at Login</strong>, <strong>Help</strong>, <strong>About StatBar</strong>, <strong>Check for Updates...</strong> and <strong>Quit StatBar</strong>.</li>
 </ol>
 <p>Rows update only while the menu is open.</p>
+<h3 id="the-warning-line">The warning line</h3>
+<p>When something suggests this Mac is struggling, one line appears under the readings with a warning mark, such as <em>Memory-starved · swap 91% full</em> or <em>Disk 97% full · 33 GB free</em>. Hover for the full sentence and every reason. It looks at <strong>swap and memory pressure, not free memory</strong>: macOS keeps free memory near zero on a healthy Mac, so a low number means nothing. It also looks at load per core, disk at 88% or more (even with space left), booted iOS simulators, Screen Sharing and how long the Mac has been up. It says <em>may be</em> because it cannot see everything, and nothing is closed for you. Swap only empties on a restart, so a Mac that has recovered can still show full swap. It also warns when a local AI server (Ollama, llama.cpp, LM Studio, Jupyter, vLLM and similar) is listening on every network interface, not just this Mac. Click the line to open Free Up Space, shut down simulators, or open the Memory tab.</p>
+<p>While iOS simulators are booted, a line offers <strong>Shut down N booted simulators</strong>. It asks first, then runs <code>simctl shutdown all</code>; simulator data is kept, and anything unsaved inside a running simulator is lost.</p>
 <h3 id="top-offenders">Top Offenders</h3>
 <p>A switch at the top of the section chooses <strong>CPU</strong>, <strong>Disk I/O</strong>, <strong>Energy</strong> or <strong>AI Tools</strong>. The first three list the three heaviest apps right now, with their icons. <strong>AI Tools</strong> lists the three AI and developer tools using the most memory, each with its RAM and CPU (see <a href="#for-ai-developers">For AI developers</a>). StatBar remembers your choice.</p>
 <ul>
@@ -373,7 +376,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li><strong>Spinning.</strong> Using at least 80% of a core right now, having averaged at least 60% of a core over a lifetime of 15 minutes or more.</li>
 <li><strong>Left behind.</strong> Its agent has exited, so launchd now owns it, and it is still using real CPU (5% or more) or 200 MB or more of memory. This relies on StatBar having watched it start since StatBar launched.</li>
 </ul>
-<p>It cannot tell a stuck process from a long build or test run, which is why it says <em>may be</em>. Editors, Ollama, Docker and Xcode builds are busy by design and are not judged. Nothing is stopped for you; use Stop Process in Monitors, which asks first. The same list appears in the status snapshot.</p>
+<p>A build tool left behind (<code>xcodebuild</code> or <code>xcodebuildmcp</code> that is hours old, using no CPU, with nothing running under it and no longer attached to the session that started it) is flagged as idle for the same reason: one such process sat for three days and blocked deleting a simulator. It cannot tell a stuck process from a long build or test run, which is why it says <em>may be</em>. Editors, Ollama, Docker and Xcode builds are busy by design and are not judged. Nothing is stopped for you; use Stop Process in Monitors, which asks first. The same list appears in the status snapshot.</p>
 <h3 id="which-ollama-model-is-loaded">Which Ollama model is loaded</h3>
 <p>When Ollama is running, a line under Top Offenders reads like <code>Ollama: qwen3:14b · 9.3 GB · 100% GPU · unloads in 4 min</code>. "Stays loaded" means it is pinned. A model that is less than 100% on the GPU is running partly on the CPU, which is much slower. StatBar gets this by asking Ollama's own API at <code>127.0.0.1:11434</code>, the loopback address of this Mac, only while Ollama is running and the menu is open (or when you take a snapshot). It contacts nothing else and does not try a custom Ollama address.</p>
 <p>In the Monitors window, the CPU and Memory tabs have an <strong>AI &amp; Dev Tools</strong> option in the process filter. It shows only processes that belong to a recognized tool, using the same rules. Combine it with <strong>Hierarchy</strong> to see what each tool has running underneath it.</p>
@@ -415,6 +418,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p>AI coding tools and developer workflows quietly fill a disk with caches that regenerate themselves: package downloads, build products, model files, simulators and container leftovers. <strong>Free Up Space...</strong> finds them, shows how big each one is, and clears the ones you tick.</p>
 <p>Open it from the menu. It scans when it opens, and <strong>Scan</strong> runs it again. Nothing is deleted without two clicks: tick items, choose <strong>Clean N Selected...</strong>, then confirm in a dialog that lists every item and size. The window also shows how much space is free on this Mac.</p>
 <p>Sizes are allocated disk space. A very large folder is measured for a limited time, so its figure can be a lower bound.</p>
+<p><code>--health</code> prints the short version: this Mac's name, uptime, swap, pressure, load, disk, booted simulators and the same verdict lines. It changes nothing. <code>bash scripts/fleet.sh --health local mbp mini</code> runs it on several Macs over ssh, and every report names the Mac it measured. <code>--snapshot</code> also carries the host name, uptime and the findings.</p>
 <h3 id="safe-to-clear">Safe to clear</h3>
 <p>These sit under <strong>Safe to clear, rebuilt automatically</strong>. Tools download or rebuild what they need on next use. Items marked "pre-ticked" are selected for you after a scan; you can untick them. Items that are not present on your Mac are not listed.</p>
 <div class="tw" tabindex="0" role="region" aria-label="Table, scrolls sideways on narrow screens"><table>
@@ -546,10 +550,15 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </tbody>
 </table></div>
 <p>If Xcode is running, items that depend on it show <strong>Quit Xcode first</strong> and cannot be ticked.</p>
+<h3 id="memory-you-can-get-back">Memory you can get back</h3>
+<p>Free Up Space also lists what is holding <strong>memory</strong> right now, under <strong>Memory you can get back</strong>: booted simulators (with the memory they hold, ticked only by you), AI and dev tools using more than half a gigabyte, and agent processes that look stuck or were left behind. The tool and process rows have a <strong>Review</strong> button that opens Monitors on AI &amp; Dev Tools, where you can quit or stop what you are not using; nothing is closed from this list. The scan takes a second longer because it samples processes once.</p>
+<h3 id="simulators-one-by-one">Simulators, one by one</h3>
+<p>If Xcode's <code>simctl</code> is present, a <strong>Simulators</strong> section lists every simulator with its size, runtime and when it was last used, largest first. Nothing in it is ticked. Tick the stock devices and old dated test simulators you no longer need and clean: each one is deleted entirely, with its apps and their data, and that cannot be undone, so the confirmation says so. A booted simulator cannot be ticked until it is shut down. Sizing many simulators takes a while, so later ones may show no size on the first scan. This is the one place StatBar deletes something that does not rebuild itself, and only after you tick it. It uses <code>simctl delete &lt;UDID&gt;</code> on a device <code>simctl</code> just listed. The command-line <code>--clean</code> never deletes simulators one by one.</p>
 <h3 id="review-yourself">Review yourself</h3>
 <p>These sit under <strong>Review yourself: large, personal, or slow to get back</strong>. StatBar shows their size and a <strong>Show</strong> button that opens the folder in Finder. <strong>StatBar never deletes anything here.</strong></p>
 <ul>
 <li>All simulators (<code>~/Library/Developer/CoreSimulator/Devices</code>)</li>
+<li>XcodeBuildMCP workspaces (<code>~/Library/Developer/XcodeBuildMCP</code>): per-project build state and logs, which can reach tens of GB</li>
 <li>Ollama models (<code>~/.ollama/models</code>)</li>
 <li>LM Studio models (<code>~/.lmstudio/models</code>)</li>
 <li>Tart virtual machines (<code>~/.tart/vms</code>; remove with <code>tart delete</code>)</li>
