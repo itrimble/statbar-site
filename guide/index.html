@@ -89,9 +89,9 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </ol></details></nav></aside>
 <main id="guide">
 <h1>StatBar User Guide</h1>
-<p class="lead">Version 1.2.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
+<p class="lead">Version 1.3.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
 <p>StatBar puts your Mac's vitals in the menu bar: CPU, GPU, memory, disk, network, battery, temperature and fans, plus optional weather. Click it for the details, open the Monitors window to see what is using your Mac, and use Free Up Space to clear the caches that developer tools and AI coding agents leave behind. If you run AI coding tools or local models, see <a href="#for-ai-developers">For AI developers</a>.</p>
-<p>This guide matches StatBar 1.2.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
+<p>This guide matches StatBar 1.3.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
 <h2 id="install">Install</h2>
 <ol type="1">
 <li>Open the download and drag <strong>StatBar.app</strong> into your <strong>Applications</strong> folder.</li>
@@ -551,7 +551,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </table></div>
 <p>If Xcode is running, items that depend on it show <strong>Quit Xcode first</strong> and cannot be ticked.</p>
 <h3 id="memory-you-can-get-back">Memory you can get back</h3>
-<p>Free Up Space also lists what is holding <strong>memory</strong> right now, under <strong>Memory you can get back</strong>: booted simulators (with the memory they hold, ticked only by you), AI and dev tools using more than half a gigabyte, any Ollama model that is loaded (with an <strong>Unload</strong> button that frees its memory at once; the model reloads on the next request), and agent processes that look stuck or were left behind. The tool and process rows have a <strong>Review</strong> button that opens Monitors on AI &amp; Dev Tools, where you can quit or stop what you are not using; nothing is closed from this list. The scan takes a second longer because it samples processes once.</p>
+<p>Free Up Space also lists what is holding <strong>memory</strong> right now, under <strong>Memory you can get back</strong>: booted simulators (with the memory they hold, ticked only by you), AI and dev tools using more than half a gigabyte, any Ollama model that is loaded (with an <strong>Unload</strong> button that frees its memory at once; the model reloads on the next request), and agent processes that look stuck or were left behind. Rows for local model servers (vLLM, oMLX, MLX, SGLang, LocalAI, KoboldCpp, llamafile, ComfyUI, LiteLLM, Open WebUI, Text Generation WebUI) and for individual stuck or left-behind processes have a <strong>Stop…</strong> button: it names the exact processes, asks them to quit (SIGTERM, never a force kill) only after you confirm, and re-checks each process's identity and owner first. Stop is never offered for agents in use, editors, Docker, Xcode, Jupyter or Ollama (use Unload). Other tool rows have a <strong>Review</strong> button that opens Monitors on AI &amp; Dev Tools, where you can quit or stop what you are not using; nothing is closed without a confirmation. The scan takes a second longer because it samples processes once.</p>
 <h3 id="simulators-one-by-one">Simulators, one by one</h3>
 <p>If Xcode's <code>simctl</code> is present, a <strong>Simulators</strong> section lists every simulator with its size, runtime and when it was last used, largest first. Nothing in it is ticked. Tick the stock devices and old dated test simulators you no longer need and clean: each one is deleted entirely, with its apps and their data, and that cannot be undone, so the confirmation says so. A booted simulator cannot be ticked until it is shut down. Sizing many simulators takes a while, so later ones may show no size on the first scan. This is the one place StatBar deletes something that does not rebuild itself, and only after you tick it. It uses <code>simctl delete &lt;UDID&gt;</code> on a device <code>simctl</code> just listed. The command-line <code>--clean</code> never deletes simulators one by one.</p>
 <h3 id="review-yourself">Review yourself</h3>
@@ -587,7 +587,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <p>Open them from <strong>Settings</strong> in the menu.</p>
 <ul>
 <li><strong>Update Interval</strong>: 1, 2, 5 or 10 seconds. The default is 2.</li>
-<li><strong>Appearance</strong>: <strong>Forge Dark</strong> (the default) gives the monitor windows a compact dark look. <strong>Follow macOS</strong> uses the system appearance.</li>
+<li><strong>Appearance</strong>: <strong>Forge Dark</strong> (the default) gives the monitor windows a compact dark look. <strong>Light</strong> draws the menu and monitor windows in the light appearance, with deeper colors so green and yellow stay readable on white. <strong>Follow macOS</strong> uses whatever the system is set to. The menu bar readout keeps its own dark plate in every mode, and Free Up Space keeps its dark backdrop.</li>
 <li><strong>Color Theme</strong>: Bands, Colorblind-friendly or Monochrome. See above.</li>
 <li><strong>Weather</strong>: see below.</li>
 <li><strong>Include System Processes</strong>: see below.</li>
