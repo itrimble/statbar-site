@@ -89,9 +89,9 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </ol></details></nav></aside>
 <main id="guide">
 <h1>StatBar User Guide</h1>
-<p class="lead">Version 1.4.2 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
+<p class="lead">Version 1.5.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
 <p>StatBar puts your Mac's vitals in the menu bar: CPU, GPU, memory, disk, network, battery, temperature and fans, plus optional weather. Click it for the details, open the Monitors window to see what is using your Mac, and use Free Up Space to clear the caches that developer tools and AI coding agents leave behind. If you run AI coding tools or local models, see <a href="#for-ai-developers">For AI developers</a>.</p>
-<p>This guide matches StatBar 1.4.2. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
+<p>This guide matches StatBar 1.5.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
 <h2 id="install">Install</h2>
 <ol type="1">
 <li>Open the download and drag <strong>StatBar.app</strong> into your <strong>Applications</strong> folder.</li>
@@ -403,6 +403,16 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li>the AI and developer tools running, with their totals.</li>
 </ul>
 <p>It contains no serial number. It is built on this Mac, copied to the clipboard, and sent nowhere.</p>
+<h3 id="the-statbar-command">The <code>statbar</code> command</h3>
+<p>StatBar has a command line as well as a menu. To run it by typing <code>statbar</code>, install the command once, either from the menu (<strong>Settings › Install Command Line Tool…</strong>) or from a terminal:</p>
+<pre class="sh"><code>/Applications/StatBar.app/Contents/MacOS/StatBar --install-cli</code></pre>
+<p>It makes a link named <code>statbar</code> to the app's own program, in the first of <code>/opt/homebrew/bin</code>, <code>/usr/local/bin</code> or <code>~/.local/bin</code> that exists and that you can write to (the last is created if needed). There is no administrator password. It never replaces a file, or a link to another tool, that already has the name <code>statbar</code>. If the folder is not on your PATH, it prints the line to add to <code>~/.zshrc</code>. If you move or delete the app, run it again.</p>
+<pre class="sh"><code>statbar --help      # the list of commands
+statbar --version
+statbar --health    # is this Mac coping? read-only
+statbar --snapshot  # Markdown report for an agent or a bug report
+statbar --clean --list</code></pre>
+<p>The commands below can all be typed as <code>statbar …</code> once it is installed. Run with no arguments, <code>statbar</code> starts the menu-bar app.</p>
 <h3 id="the-command-line---snapshot">The command line: <code>--snapshot</code></h3>
 <p>Agents and scripts can ask for the same summary themselves, without opening the menu:</p>
 <pre class="sh"><code>/Applications/StatBar.app/Contents/MacOS/StatBar --snapshot
@@ -591,6 +601,7 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 <li><strong>Update Interval</strong>: 1, 2, 5 or 10 seconds. The default is 2.</li>
 <li><strong>Appearance</strong>: <strong>Forge Dark</strong> (the default) gives the monitor windows a compact dark look. <strong>Light</strong> draws the menu and monitor windows in the light appearance, with deeper colors so green and yellow stay readable on white. <strong>Follow macOS</strong> uses whatever the system is set to. The menu bar readout keeps its own dark plate in every mode, and Free Up Space keeps its dark backdrop.</li>
 <li><strong>Menu Bar Text Size</strong>: <strong>Standard</strong>, <strong>Large</strong> (the default) or <strong>Extra Large</strong>. Two rows must fit the bar, so Extra Large only applies on Macs with a taller (notched) menu bar. If macOS hides the StatBar item because the bar is crowded, choose Standard.</li>
+<li><strong>Install Command Line Tool…</strong>: adds the <code>statbar</code> command (see <strong>The <code>statbar</code> command</strong>). Nothing happens until you click it.</li>
 <li><strong>Color Theme</strong>: Bands, Colorblind-friendly or Monochrome. See above.</li>
 <li><strong>Weather</strong>: see below.</li>
 <li><strong>Include System Processes</strong>: see below.</li>
