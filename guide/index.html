@@ -89,9 +89,9 @@ footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;colo
 </ol></details></nav></aside>
 <main id="guide">
 <h1>StatBar User Guide</h1>
-<p class="lead">Version 1.6.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
+<p class="lead">Version 1.7.0 · macOS 13 or later · <a href="../">statbar.remnantsecurity.com</a></p>
 <p>StatBar puts your Mac's vitals in the menu bar: CPU, GPU, memory, disk, network, battery, temperature and fans, plus optional weather. Click it for the details, open the Monitors window to see what is using your Mac, and use Free Up Space to clear the caches that developer tools and AI coding agents leave behind. If you run AI coding tools or local models, see <a href="#for-ai-developers">For AI developers</a>.</p>
-<p>This guide matches StatBar 1.6.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
+<p>This guide matches StatBar 1.7.0. It requires macOS 13 or later, on Apple silicon or Intel. Fan control works on Apple silicon only.</p>
 <h2 id="install">Install</h2>
 <ol type="1">
 <li>Open the download and drag <strong>StatBar.app</strong> into your <strong>Applications</strong> folder.</li>
@@ -431,7 +431,7 @@ statbar --clean --list</code></pre>
 <li><code>readiness</code>: whether this Mac can take a typical job (2 GB of memory, 5 GB of disk) now (<code>ready</code>, <code>reason</code>, <code>buildSlots</code>, the reserves and what is left after them). <code>--ready</code> takes other sizes.</li>
 <li><code>memory</code> (including <code>availableBytes</code> and swap), <code>swapOutBytesPerSecond</code> (what is being written to swap over the sampling second), <code>cpuPercent</code>, <code>loadAverage</code>, <code>disk</code>, <code>network</code> (bytes per second down and up), <code>battery</code>, <code>thermalState</code>.</li>
 <li><code>simulators</code>: each booted simulator with its device name and runtime, the apps running in it, CPU, memory, and whether it looks idle.</li>
-<li><code>toolchain</code>: the Xcode version, available simulator runtimes, and how many code-signing identities the keychain has (a count; names are never included).</li>
+<li><code>toolchain</code>: the Xcode version, available simulator runtimes, and how many code-signing identities the keychain has (a count; names are never included), and the simslim version if it is installed.</li>
 <li><code>topByCPU</code>, <code>topByMemory</code>, <code>aiTools</code>, <code>possiblyStuck</code>, <code>ollamaLoadedModels</code>, and <code>cleanable</code> with <code>--with-cleanup</code>.</li>
 </ul>
 <h3 id="can-this-mac-take-the-job---ready">Can this Mac take the job? <code>--ready</code></h3>
@@ -566,6 +566,11 @@ statbar --ready --json</code></pre>
 <td>Removes simulators whose runtime is gone, usually after an Xcode update. Shown only when there are some.</td>
 </tr>
 <tr>
+<td>Trim simulator caches and logs</td>
+<td><code>simslim disk-clean … --categories caches,logs</code></td>
+<td>Deletes caches and logs inside simulators that are shut down; apps, data and the simulators stay. Shown only when the optional <a href="https://github.com/mobai-app/simslim">simslim</a> tool is installed (<code>brew install mobai-app/tap/simslim</code>). Booted simulators are skipped, so nothing is rebooted. Quit Xcode first</td>
+</tr>
+<tr>
 <td>Erase all simulator contents</td>
 <td><code>simctl shutdown all</code>, then <code>simctl erase all</code></td>
 <td>Resets every simulator to factory state: apps and their data are removed, simulators and runtimes are kept</td>
@@ -584,7 +589,7 @@ statbar --ready --json</code></pre>
 <h3 id="watch-for-runaway-processes">Watch for Runaway Processes</h3>
 <p><strong>Settings › Watch for Runaway Processes</strong> (off by default) looks at every process about every 30 seconds and notes any that stay above 60% of a core, even with brief dips. After 15 minutes a process is reported in the warning line and as a row in Memory you can get back, with <strong>Stop…</strong>. This catches something that started spinning recently, which a lifetime average hides. Builds, <code>kernel_task</code>, WindowServer and StatBar itself are never reported. Off, StatBar samples nothing while the menu is closed, and the warning line falls back to processes that have averaged most of a core for hours. System processes (<code>audioanalyticsd</code>, <code>trustd</code>) are named but cannot be stopped from StatBar; restarting clears them.</p>
 <h3 id="simulators-one-by-one">Simulators, one by one</h3>
-<p>If Xcode's <code>simctl</code> is present, a <strong>Simulators</strong> section lists every simulator with its size, runtime and when it was last used, largest first. Nothing in it is ticked. Tick the stock devices and old dated test simulators you no longer need and clean: each one is deleted entirely, with its apps and their data, and that cannot be undone, so the confirmation says so. A booted simulator cannot be ticked until it is shut down. Sizing many simulators takes a while, so later ones may show no size on the first scan. This is the one place StatBar deletes something that does not rebuild itself, and only after you tick it. It uses <code>simctl delete &lt;UDID&gt;</code> on a device <code>simctl</code> just listed. The command-line <code>--clean</code> never deletes simulators one by one.</p>
+<p>If Xcode's <code>simctl</code> is present, a <strong>Simulators</strong> section lists every simulator with its size, runtime and when it was last used, largest first. Nothing in it is ticked. Tick the stock devices and old dated test simulators you no longer need and clean: each one is deleted entirely, with its apps and their data, and that cannot be undone, so the confirmation says so. A booted simulator cannot be ticked until it is shut down. Sizing many simulators takes a while, so later ones may show no size on the first scan. This is the one place StatBar deletes something that does not rebuild itself, and only after you tick it. It uses <code>simctl delete &lt;UDID&gt;</code> on a device <code>simctl</code> just listed. If you have the optional <strong>simslim</strong> tool, hovering the Shut down row also shows how to keep a booted simulator running on less memory (<code>simslim on &lt;udid&gt;</code>, which reboots it and turns off iCloud, push and Siri inside it). StatBar never installs or runs that part for you, and <code>--snapshot</code> reports its version under <code>toolchain</code>. The command-line <code>--clean</code> never deletes simulators one by one.</p>
 <h3 id="review-yourself">Review yourself</h3>
 <p>These sit under <strong>Review yourself: large, personal, or slow to get back</strong>. StatBar shows their size and a <strong>Show</strong> button that opens the folder in Finder. <strong>StatBar never deletes anything here.</strong></p>
 <ul>
