@@ -431,7 +431,7 @@ statbar --clean --list</code></pre>
 <li><code>readiness</code>: whether this Mac can take a typical job (2 GB of memory, 5 GB of disk) now (<code>ready</code>, <code>reason</code>, <code>buildSlots</code>, the reserves and what is left after them). <code>--ready</code> takes other sizes.</li>
 <li><code>memory</code> (including <code>availableBytes</code> and swap), <code>swapOutBytesPerSecond</code> (what is being written to swap over the sampling second), <code>cpuPercent</code>, <code>loadAverage</code>, <code>disk</code>, <code>network</code> (bytes per second down and up), <code>battery</code>, <code>thermalState</code>.</li>
 <li><code>simulators</code>: each booted simulator with its device name and runtime, the apps running in it, CPU, memory, and whether it looks idle.</li>
-<li><code>toolchain</code>: the Xcode version, available simulator runtimes, and how many code-signing identities the keychain has (a count; names are never included), and the simslim version if it is installed.</li>
+<li><code>toolchain</code>: the Xcode version, available simulator runtimes, and how many code-signing identities the keychain has (a count; names are never included).</li>
 <li><code>topByCPU</code>, <code>topByMemory</code>, <code>aiTools</code>, <code>possiblyStuck</code>, <code>ollamaLoadedModels</code>, and <code>cleanable</code> with <code>--with-cleanup</code>.</li>
 </ul>
 <h3 id="can-this-mac-take-the-job---ready">Can this Mac take the job? <code>--ready</code></h3>
@@ -567,8 +567,18 @@ statbar --ready --json</code></pre>
 </tr>
 <tr>
 <td>Trim simulator caches and logs</td>
-<td><code>simslim disk-clean … --categories caches,logs</code></td>
-<td>Deletes caches and logs inside simulators that are shut down; apps, data and the simulators stay. Shown only when the optional <a href="https://github.com/mobai-app/simslim">simslim</a> tool is installed (<code>brew install mobai-app/tap/simslim</code>). Booted simulators are skipped, so nothing is rebooted. Quit Xcode first</td>
+<td>The <code>Caches</code> and log folders inside each shut-down simulator's data folder</td>
+<td>Apps, their data, Documents, media and the simulators stay. Booted simulators are skipped. Quit Xcode first</td>
+</tr>
+<tr>
+<td>Slim idle simulators</td>
+<td>A launchd disable list written for each shut-down simulator</td>
+<td>Switches off about 150 background services (Siri, iCloud, widgets, Health, Photos analysis and more) so a simulator uses roughly a third of the memory when booted. Push, App Store/StoreKit and universal links stay on. iOS and tvOS 18.5 or newer. Takes effect on the next boot</td>
+</tr>
+<tr>
+<td>Restore slimmed simulators</td>
+<td>The same list, cleared</td>
+<td>Turns those services back on at the next boot. Shown only when some simulators are slimmed</td>
 </tr>
 <tr>
 <td>Erase all simulator contents</td>
@@ -589,7 +599,7 @@ statbar --ready --json</code></pre>
 <h3 id="watch-for-runaway-processes">Watch for Runaway Processes</h3>
 <p><strong>Settings › Watch for Runaway Processes</strong> (off by default) looks at every process about every 30 seconds and notes any that stay above 60% of a core, even with brief dips. After 15 minutes a process is reported in the warning line and as a row in Memory you can get back, with <strong>Stop…</strong>. This catches something that started spinning recently, which a lifetime average hides. Builds, <code>kernel_task</code>, WindowServer and StatBar itself are never reported. Off, StatBar samples nothing while the menu is closed, and the warning line falls back to processes that have averaged most of a core for hours. System processes (<code>audioanalyticsd</code>, <code>trustd</code>) are named but cannot be stopped from StatBar; restarting clears them.</p>
 <h3 id="simulators-one-by-one">Simulators, one by one</h3>
-<p>If Xcode's <code>simctl</code> is present, a <strong>Simulators</strong> section lists every simulator with its size, runtime and when it was last used, largest first. Nothing in it is ticked. Tick the stock devices and old dated test simulators you no longer need and clean: each one is deleted entirely, with its apps and their data, and that cannot be undone, so the confirmation says so. A booted simulator cannot be ticked until it is shut down. Sizing many simulators takes a while, so later ones may show no size on the first scan. This is the one place StatBar deletes something that does not rebuild itself, and only after you tick it. It uses <code>simctl delete &lt;UDID&gt;</code> on a device <code>simctl</code> just listed. If you have the optional <strong>simslim</strong> tool, hovering the Shut down row also shows how to keep a booted simulator running on less memory (<code>simslim on &lt;udid&gt;</code>, which reboots it and turns off iCloud, push and Siri inside it). StatBar never installs or runs that part for you, and <code>--snapshot</code> reports its version under <code>toolchain</code>. The command-line <code>--clean</code> never deletes simulators one by one.</p>
+<p>If Xcode's <code>simctl</code> is present, a <strong>Simulators</strong> section lists every simulator with its size, runtime and when it was last used, largest first. Nothing in it is ticked. Tick the stock devices and old dated test simulators you no longer need and clean: each one is deleted entirely, with its apps and their data, and that cannot be undone, so the confirmation says so. A booted simulator cannot be ticked until it is shut down. Sizing many simulators takes a while, so later ones may show no size on the first scan. This is the one place StatBar deletes something that does not rebuild itself, and only after you tick it. It uses <code>simctl delete &lt;UDID&gt;</code> on a device <code>simctl</code> just listed. <strong>Slim idle simulators</strong> (in Free Up Space, unticked until you choose it) writes the list of background services a simulator does not need, so the next time you boot it, it comes up with about 100 processes instead of 215 and roughly 1 GB instead of 3 GB (measured on an iPhone 17 simulator, iOS 26.5). It never touches a booted simulator, runs no tool and reboots nothing, and <strong>Restore slimmed simulators</strong> undoes it. Inside a slimmed simulator Siri, iCloud, widgets, Health, Photos analysis and similar features do not work; push notifications, StoreKit and universal links do. The service list comes from the open-source <a href="https://github.com/mobai-app/simslim">simslim</a> project (MIT; notice in <code>docs/third-party/simslim-LICENSE.txt</code>). The command-line <code>--clean</code> never deletes simulators one by one.</p>
 <h3 id="review-yourself">Review yourself</h3>
 <p>These sit under <strong>Review yourself: large, personal, or slow to get back</strong>. StatBar shows their size and a <strong>Show</strong> button that opens the folder in Finder. <strong>StatBar never deletes anything here.</strong></p>
 <ul>
